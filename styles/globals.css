@@ -29,6 +29,15 @@ h1.h1-primary {
   line-height: 1;
 }
 
+h2.h2-primar {
+  font-size: 3.5rem;
+  line-height: 1;
+}
+
+p.h2-primary {
+  font-size: 3.5rem;
+}
+
 p.p-large {
   font-size: 2rem;
 }

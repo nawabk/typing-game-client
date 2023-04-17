@@ -3,12 +3,16 @@ import styles from "../../styles/Home.module.css";
 
 import useSocket from "@/hooks/useSocket";
 import { useGameDetailsContext } from "@/context/game-details-context";
+import Loader from "../common/Loader";
+import { useRouter } from "next/router";
 
 const Home: React.FC = () => {
   const inputRef = useRef<HTMLInputElement>(null);
   const { dispatch } = useGameDetailsContext();
   const [error, setError] = useState<boolean>(false);
   const socket = useSocket();
+  const [findingCompetitor, setFindingCompetitor] = useState<boolean>(false);
+  const router = useRouter();
 
   const formSubmitHandler = (e: React.SyntheticEvent) => {
     e.preventDefault();
@@ -17,7 +21,6 @@ const Home: React.FC = () => {
     if (!userName) {
       setError(true);
     } else {
-      //   setUserName(userName);
       dispatch({
         type: "SET_USERNAME",
         payload: {
@@ -25,22 +28,49 @@ const Home: React.FC = () => {
         },
       });
       socket.emit("start-play", userName);
+      setFindingCompetitor(true);
     }
   };
 
   useEffect(() => {
+    function navigateToPlayground(channel: string) {
+      router.push(`/play/${channel}`);
+    }
     if (socket) {
-      socket.on("challenge_details", (message) => {
-        console.log(message);
-      });
-      socket.on("competitor", (name) => {
-        console.log(name);
+      socket.on(
+        "challenge_details",
+        (message: { channel: string; paragraph: string }) => {
+          const { channel, paragraph } = message;
+          setTimeout(() => {
+            navigateToPlayground(channel);
+          }, 2 * 1000);
+          dispatch({
+            type: "SET_GAME_DETAILS",
+            payload: {
+              channel,
+              paragraph,
+            },
+          });
+        }
+      );
+      socket.on("competitor", (name: string) => {
+        dispatch({
+          type: "SET_COMPETITOR",
+          payload: {
+            competitor: name,
+          },
+        });
       });
     }
-  }, [socket]);
+  }, [socket, dispatch, router]);
 
   return (
     <main className={styles.main}>
+      {findingCompetitor && (
+        <div className={styles.loader}>
+          <Loader text="Finding Competitor" />
+        </div>
+      )}
       <div className={styles.heading}>
         <h1 className="h1-primary">Typing Game</h1>
         <p className="p-large">

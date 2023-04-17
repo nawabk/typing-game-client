@@ -1,0 +1,20 @@
+.playground {
+  margin-top: 15rem;
+  padding-inline: 10vw;
+}
+.paragraph-box {
+  padding: 4rem;
+  background-color: var(--color-off-white);
+  color: var(--color-black);
+  max-height: 30rem;
+  overflow: auto;
+  font-size: 3rem;
+  margin-top: 10rem;
+}
+
+.green {
+  color: green;
+}
+.red {
+  color: red;
+}
