@@ -90,8 +90,9 @@ const Character: React.FC<{
       const charBottom = charClientRect?.bottom ?? 0;
 
       if (paragraphBottom && charBottom && paragraphBottom - charBottom <= 20) {
+        const scrollTop = paragraphRef.current?.scrollTop;
         paragraphRef.current?.scrollTo({
-          top: 100,
+          top: scrollTop + 100,
           behavior: "smooth",
         });
       }
