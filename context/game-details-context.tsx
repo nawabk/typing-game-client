@@ -23,18 +23,6 @@ const GameDetailsContext = React.createContext<
 const reducer = (state: State, action: Action): State => {
   const { type, payload } = action;
   switch (type) {
-    // case "SET_USERNAME": {
-    //   return {
-    //     ...state,
-    //     userName: payload?.userName ?? "",
-    //   };
-    // }
-    // case "SET_COMPETITOR": {
-    //   return {
-    //     ...state,
-    //     competitor: payload?.competitor ?? "",
-    //   };
-    // }
     case "SET_USERNAME":
     case "SET_COMPETITOR":
     case "SET_GAME_DETAILS": {

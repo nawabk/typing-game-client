@@ -5,6 +5,7 @@ import React, {
   useState,
   MutableRefObject,
   useLayoutEffect,
+  RefObject,
 } from "react";
 import styles from "@/styles/Playground.module.css";
 
@@ -13,6 +14,8 @@ const ParagraphBox: React.FC<{ paragraph: string }> = ({ paragraph }) => {
   const [cursorIndex, setCursorIndex] = useState<number>(-1);
   const [currentKey, setCurrentKey] = useState<string>("");
   const paragraphRef = useRef<HTMLDivElement | null>(null);
+  const totalWrongChars = useRef<number>(0);
+  const timer = useRef<ReturnType<typeof setTimeout> | null>(null);
 
   useEffect(() => {
     function keyPressHandler(e: KeyboardEvent) {
@@ -33,8 +36,15 @@ const ParagraphBox: React.FC<{ paragraph: string }> = ({ paragraph }) => {
       }
     }
     addEventListener("keydown", keyPressHandler);
+    timer.current = setTimeout(() => {
+      removeEventListener("keydown", keyPressHandler);
+      console.log(totalWrongChars.current);
+    }, 20 * 1000);
     return () => {
       removeEventListener("keydown", keyPressHandler);
+      if (!!timer.current) {
+        clearTimeout(timer.current);
+      }
     };
   }, []);
   return (
@@ -58,6 +68,7 @@ const ParagraphBox: React.FC<{ paragraph: string }> = ({ paragraph }) => {
             paragraphRef={paragraphRef as MutableRefObject<HTMLDivElement>}
             paragraphHeight={paragraphHeight ?? 0}
             paragraphBottom={paragraphBottom ?? 0}
+            totalWrongChars={totalWrongChars}
           />
         );
       })}
@@ -73,6 +84,7 @@ const Character: React.FC<{
   paragraphRef: MutableRefObject<HTMLDivElement>;
   paragraphHeight: number;
   paragraphBottom: number;
+  totalWrongChars: MutableRefObject<number>;
 }> = ({
   index,
   cursorIndex,
@@ -81,6 +93,7 @@ const Character: React.FC<{
   paragraphRef,
   paragraphBottom,
   paragraphHeight,
+  totalWrongChars,
 }) => {
   const charRef = useRef<HTMLSpanElement | null>(null);
   const charClientRect = charRef.current?.getBoundingClientRect();
@@ -99,23 +112,35 @@ const Character: React.FC<{
     }
   }
 
-  if (currentKey === "Backspace") {
-    if (cursorIndex !== -1 && cursorIndex + 1 === index) {
-      if (charRef.current?.className) {
-        charRef.current.className = "";
+  if (!!currentKey) {
+    if (currentKey === "Backspace") {
+      if (cursorIndex !== -1 && cursorIndex + 1 === index) {
+        if (charRef.current?.className) {
+          if (charRef.current.classList.contains(styles.incorrect)) {
+            totalWrongChars.current = totalWrongChars.current - 1;
+          }
+
+          charRef.current.className = "";
+        }
       }
-    }
-  } else {
-    if (index === cursorIndex) {
-      checkIfScroll();
-      if (ch === currentKey) {
-        charRef.current?.classList?.add(styles.green);
-      } else {
-        charRef.current?.classList?.add(styles.red);
+    } else {
+      if (index === cursorIndex) {
+        checkIfScroll();
+        if (ch === currentKey) {
+          if (charRef.current?.classList) {
+            charRef.current?.classList?.add(styles.correct);
+          }
+        } else {
+          if (charRef.current?.classList) {
+            if (!charRef.current.classList.contains(styles.incorrect)) {
+              totalWrongChars.current = totalWrongChars.current + 1;
+            }
+            charRef.current.classList.add(styles.incorrect);
+          }
+        }
       }
     }
   }
   return <span ref={charRef}>{ch}</span>;
 };
-
 export default ParagraphBox;
