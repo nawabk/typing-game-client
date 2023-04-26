@@ -10,7 +10,10 @@ import React, {
 import styles from "@/styles/Playground.module.css";
 
 const DISALLOWED_KEYS = ["Shift", "CapsLock"];
-const ParagraphBox: React.FC<{ paragraph: string }> = ({ paragraph }) => {
+const ParagraphBox: React.FC<{ paragraph: string; startGame: boolean }> = ({
+  paragraph,
+  startGame,
+}) => {
   const [cursorIndex, setCursorIndex] = useState<number>(-1);
   const [currentKey, setCurrentKey] = useState<string>("");
   const paragraphRef = useRef<HTMLDivElement | null>(null);
@@ -35,18 +38,22 @@ const ParagraphBox: React.FC<{ paragraph: string }> = ({ paragraph }) => {
         }
       }
     }
-    addEventListener("keydown", keyPressHandler);
-    timer.current = setTimeout(() => {
-      removeEventListener("keydown", keyPressHandler);
-      console.log(totalWrongChars.current);
-    }, 20 * 1000);
+    if (startGame) {
+      addEventListener("keydown", keyPressHandler);
+      timer.current = setTimeout(() => {
+        removeEventListener("keydown", keyPressHandler);
+        console.log(totalWrongChars.current);
+      }, 20 * 1000);
+    }
     return () => {
-      removeEventListener("keydown", keyPressHandler);
-      if (!!timer.current) {
-        clearTimeout(timer.current);
+      if (startGame) {
+        removeEventListener("keydown", keyPressHandler);
+        if (!!timer.current) {
+          clearTimeout(timer.current);
+        }
       }
     };
-  }, []);
+  }, [startGame]);
   return (
     <div className={styles["paragraph-box"]} ref={paragraphRef}>
       {paragraph.split("").map((ch, index) => {

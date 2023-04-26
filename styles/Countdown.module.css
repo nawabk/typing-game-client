@@ -1,0 +1,40 @@
+.backdrop {
+  position: fixed;
+  left: 0;
+  right: 0;
+  top: 0;
+  bottom: 0;
+  background-color: rgba(0, 0, 0, 0.6);
+  z-index: 1;
+  transition: background-color 0.5s;
+}
+.countdown {
+  position: absolute;
+  left: 50%;
+  top: 20%;
+  transform: translateX(-50%);
+  z-index: 2;
+}
+
+.countdown h2 {
+  font-size: 15rem;
+  color: var(--color-primary-blue);
+}
+
+.countanime {
+  animation: countdownAnime 0.2s;
+  /* animation: name duration timing-function delay iteration-count direction
+    fill-mode; */
+}
+
+@keyframes countdownAnime {
+  0% {
+    opacity: 0.5;
+    transform: scale(0.5);
+  }
+
+  100% {
+    opacity: 1;
+    transform: scale(1);
+  }
+}
