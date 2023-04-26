@@ -1,12 +1,16 @@
 import styles from "@/styles/Countdown.module.css";
 import { useEffect, useRef, useState } from "react";
 import Backdrop from "../common/Backdrop";
+import { useGameDetailsContext } from "@/context/game-details-context";
+import { JsxElement } from "typescript";
 
 const Countdown: React.FC<{ setStartGame: (val: boolean) => void }> = ({
   setStartGame,
 }) => {
-  const [countdown, setCountDown] = useState<number>(3);
+  const [countdown, setCountDown] = useState<number>(4);
   const ref = useRef<HTMLHeadingElement | null>(null);
+  const { state } = useGameDetailsContext();
+  const { userName, competitor } = state;
 
   useEffect(() => {
     let interval: ReturnType<typeof setInterval> | null = null;
@@ -36,12 +40,25 @@ const Countdown: React.FC<{ setStartGame: (val: boolean) => void }> = ({
     }
   }, [countdown, setStartGame]);
 
+  function getH2Text() {
+    if (countdown === 4) {
+      return (
+        <span>
+          {userName} vs {competitor}
+        </span>
+      );
+    } else if (countdown === 0) {
+      return "GO!";
+    }
+    return countdown.toString();
+  }
+
   return (
     <>
       <div className={styles.backdrop}></div>
       <div className={styles.countdown}>
         <h2 className={`h2-primary ${styles.countanime}`} ref={ref}>
-          {countdown === 0 ? "GO!" : countdown}
+          {getH2Text()}
         </h2>
       </div>
     </>
