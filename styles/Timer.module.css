@@ -1,0 +1,14 @@
+.timer {
+  height: 18rem;
+  width: 18rem;
+  border-radius: 50%;
+  border: 1.5rem solid var(--color-primary-blue);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.count {
+  font-size: 10rem;
+  color: var(--color-sky-blue);
+}

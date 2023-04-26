@@ -1,59 +1,58 @@
 import React, {
-  type Ref,
   useEffect,
   useRef,
   useState,
   MutableRefObject,
-  useLayoutEffect,
-  RefObject,
+  useCallback,
 } from "react";
 import styles from "@/styles/Playground.module.css";
 
 const DISALLOWED_KEYS = ["Shift", "CapsLock"];
-const ParagraphBox: React.FC<{ paragraph: string; startGame: boolean }> = ({
-  paragraph,
-  startGame,
-}) => {
+const ParagraphBox: React.FC<{
+  paragraph: string;
+  startGame: boolean;
+  stopGame: boolean;
+}> = ({ paragraph, startGame, stopGame }) => {
   const [cursorIndex, setCursorIndex] = useState<number>(-1);
   const [currentKey, setCurrentKey] = useState<string>("");
   const paragraphRef = useRef<HTMLDivElement | null>(null);
   const totalWrongChars = useRef<number>(0);
-  const timer = useRef<ReturnType<typeof setTimeout> | null>(null);
 
-  useEffect(() => {
-    function keyPressHandler(e: KeyboardEvent) {
-      const { key } = e;
-      if (!DISALLOWED_KEYS.includes(key)) {
-        if (key === "Backspace") {
-          setCursorIndex((prev) => {
-            if (prev !== -1) {
-              return prev - 1;
-            }
-            return prev;
-          });
-          setCurrentKey(key);
-        } else {
-          setCurrentKey(key);
-          setCursorIndex((prev) => prev + 1);
-        }
+  const keyPressHandler = useCallback((e: KeyboardEvent) => {
+    const { key } = e;
+    if (!DISALLOWED_KEYS.includes(key)) {
+      if (key === "Backspace") {
+        setCursorIndex((prev) => {
+          if (prev !== -1) {
+            return prev - 1;
+          }
+          return prev;
+        });
+        setCurrentKey(key);
+      } else {
+        setCurrentKey(key);
+        setCursorIndex((prev) => prev + 1);
       }
     }
+  }, []);
+
+  useEffect(() => {
     if (startGame) {
       addEventListener("keydown", keyPressHandler);
-      timer.current = setTimeout(() => {
-        removeEventListener("keydown", keyPressHandler);
-        console.log(totalWrongChars.current);
-      }, 20 * 1000);
     }
     return () => {
       if (startGame) {
         removeEventListener("keydown", keyPressHandler);
-        if (!!timer.current) {
-          clearTimeout(timer.current);
-        }
       }
     };
-  }, [startGame]);
+  }, [startGame, keyPressHandler]);
+
+  useEffect(() => {
+    if (stopGame) {
+      removeEventListener("keydown", keyPressHandler);
+    }
+  }, [stopGame, keyPressHandler]);
+
   return (
     <div className={styles["paragraph-box"]} ref={paragraphRef}>
       {paragraph.split("").map((ch, index) => {
