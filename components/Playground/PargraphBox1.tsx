@@ -10,22 +10,26 @@ const ParagraphBox: React.FC = () => {
   const [activeWordIndex, setActiveWordIndex] = useState<number>(0);
   const lastCorrectlyTypedWordIndex = useRef<number>(-1);
   const caretRef = useRef<HTMLDivElement | null>(null);
+  const paragraphRef = useRef<HTMLDivElement | null>(null);
 
   const words = paragraph.split(" ");
   return (
     <>
       <Caret ref={caretRef} />
-      <div className={styles.words}>
-        {words.map((word, index) => (
-          <Word
-            key={index}
-            word={word}
-            isActive={index === activeWordIndex}
-            setActiveWordIndex={setActiveWordIndex}
-            lastCorrectlyTypedWordIndex={lastCorrectlyTypedWordIndex}
-            caretRef={caretRef}
-          />
-        ))}
+      <div className={styles.words} ref={paragraphRef}>
+        {words.map((word, index) => {
+          return (
+            <Word
+              key={index}
+              word={word}
+              isActive={index === activeWordIndex}
+              setActiveWordIndex={setActiveWordIndex}
+              lastCorrectlyTypedWordIndex={lastCorrectlyTypedWordIndex}
+              caretRef={caretRef}
+              paragraphRef={paragraphRef}
+            />
+          );
+        })}
       </div>
     </>
   );

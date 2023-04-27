@@ -16,12 +16,14 @@ const Word: React.FC<{
   setActiveWordIndex: Dispatch<SetStateAction<number>>;
   lastCorrectlyTypedWordIndex: MutableRefObject<number>;
   caretRef: MutableRefObject<HTMLDivElement | null>;
+  paragraphRef: MutableRefObject<HTMLDivElement | null>;
 }> = ({
   word,
   isActive,
   setActiveWordIndex,
   lastCorrectlyTypedWordIndex,
   caretRef,
+  paragraphRef,
 }) => {
   const [cursorIndex, setCursorIndex] = useState<number>(-1);
   const [currentKey, setCurrentKey] = useState<string>("");
@@ -103,6 +105,7 @@ const Word: React.FC<{
           caretRef={caretRef}
           isActive={isActive}
           isLastLetter={index === length - 1}
+          paragraphRef={paragraphRef}
         />
       ))}
     </div>
