@@ -15,7 +15,14 @@ const Word: React.FC<{
   isActive: boolean;
   setActiveWordIndex: Dispatch<SetStateAction<number>>;
   lastCorrectlyTypedWordIndex: MutableRefObject<number>;
-}> = ({ word, isActive, setActiveWordIndex, lastCorrectlyTypedWordIndex }) => {
+  caretRef: MutableRefObject<HTMLDivElement | null>;
+}> = ({
+  word,
+  isActive,
+  setActiveWordIndex,
+  lastCorrectlyTypedWordIndex,
+  caretRef,
+}) => {
   const [cursorIndex, setCursorIndex] = useState<number>(-1);
   const [currentKey, setCurrentKey] = useState<string>("");
   const length = word.length;
@@ -28,6 +35,7 @@ const Word: React.FC<{
 
   useEffect(() => {
     function keyPressHandler(e: KeyboardEvent) {
+      e.preventDefault();
       const { key } = e;
       if (!DISALLOWED_KEYS.includes(key)) {
         if (key === " ") {
@@ -92,6 +100,9 @@ const Word: React.FC<{
           currentKey={currentKey}
           index={index}
           totlaIncorrectTypedLetter={totalIncorrectTypedLetter}
+          caretRef={caretRef}
+          isActive={isActive}
+          isLastLetter={index === length - 1}
         />
       ))}
     </div>

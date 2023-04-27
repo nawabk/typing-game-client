@@ -7,14 +7,37 @@ const Letter: React.FC<{
   cursorIndex: number;
   index: number;
   totlaIncorrectTypedLetter: MutableRefObject<number>;
+  isActive: boolean;
+  caretRef: MutableRefObject<HTMLDivElement | null>;
+  isLastLetter: boolean;
 }> = ({
   letter,
   currentKey,
   cursorIndex,
   index,
   totlaIncorrectTypedLetter,
+  isActive,
+  caretRef,
+  isLastLetter,
 }) => {
   const letterRef = useRef<HTMLSpanElement | null>(null);
+
+  useEffect(() => {
+    if (isActive) {
+      const isTypingAnyLetter = cursorIndex + 1 === index;
+      const isTypingLastLetter = isLastLetter && index === cursorIndex;
+      if (isTypingAnyLetter || isTypingLastLetter) {
+        const { left, top, right } =
+          letterRef.current?.getBoundingClientRect() || {};
+        if (caretRef.current?.style && left && top && right) {
+          caretRef.current.style.left =
+            (!isTypingLastLetter ? (left - 3).toString() : right.toString()) +
+            "px";
+          caretRef.current.style.top = top.toString() + "px";
+        }
+      }
+    }
+  }, [index, cursorIndex, caretRef, isActive, isLastLetter]);
 
   useEffect(() => {
     if (currentKey === "Backspace") {
