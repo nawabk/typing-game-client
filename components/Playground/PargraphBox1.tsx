@@ -1,11 +1,14 @@
 import { useGameDetailsContext } from "@/context/game-details-context";
 import Word from "./Word";
 import styles from "@/styles/Playground.module.css";
-import { MutableRefObject, useRef, useState } from "react";
+import { MutableRefObject, useEffect, useRef, useState } from "react";
+import WpmTracker from "./WpmTracker";
 
 const ParagraphBox: React.FC<{
   caretRef: MutableRefObject<HTMLDivElement | null>;
-}> = ({ caretRef }) => {
+  startGame: boolean;
+  stopGame: boolean;
+}> = ({ caretRef, startGame, stopGame }) => {
   const { state } = useGameDetailsContext();
   const { paragraph } = state;
   const [activeWordIndex, setActiveWordIndex] = useState<number>(0);
@@ -13,6 +16,11 @@ const ParagraphBox: React.FC<{
   const paragraphRef = useRef<HTMLDivElement | null>(null);
 
   const words = paragraph.split(" ");
+
+  useEffect(() => {
+    WpmTracker.resetData();
+  }, []);
+
   return (
     <>
       <div className={styles.words} ref={paragraphRef}>
@@ -26,6 +34,8 @@ const ParagraphBox: React.FC<{
               lastCorrectlyTypedWordIndex={lastCorrectlyTypedWordIndex}
               caretRef={caretRef}
               paragraphRef={paragraphRef}
+              startGame={startGame}
+              stopGame={stopGame}
             />
           );
         })}

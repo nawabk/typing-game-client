@@ -9,16 +9,19 @@ import Caret from "./Caret";
 const Playground: React.FC = () => {
   const [startGame, setStartGame] = useState<boolean>(false);
   const [stopGame, setStopGame] = useState<boolean>(false);
-  const { state } = useGameDetailsContext();
   const caretRef = useRef<HTMLDivElement | null>(null);
 
   return (
     <div>
       <Caret ref={caretRef} />
-      {/* {!startGame && <Countdown setStartGame={setStartGame} />} */}
+      {!startGame && <Countdown setStartGame={setStartGame} />}
       <div className={styles.playground}>
-        {/* <Timer startGame={startGame} setStopGame={setStopGame} /> */}
-        <ParagraphBox caretRef={caretRef} />
+        <Timer startGame={startGame} setStopGame={setStopGame} />
+        <ParagraphBox
+          caretRef={caretRef}
+          startGame={startGame}
+          stopGame={stopGame}
+        />
       </div>
     </div>
   );

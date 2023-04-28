@@ -2,12 +2,15 @@ import {
   Dispatch,
   MutableRefObject,
   SetStateAction,
+  useCallback,
   useEffect,
   useRef,
   useState,
 } from "react";
 import Letter from "./Letter";
 import styles from "@/styles/Playground.module.css";
+import WpmTracker from "./WpmTracker";
+import { GAME_LENGTH } from "./Constansts";
 
 const DISALLOWED_KEYS = ["Shift", "CapsLock"];
 const Word: React.FC<{
@@ -17,6 +20,8 @@ const Word: React.FC<{
   lastCorrectlyTypedWordIndex: MutableRefObject<number>;
   caretRef: MutableRefObject<HTMLDivElement | null>;
   paragraphRef: MutableRefObject<HTMLDivElement | null>;
+  startGame: boolean;
+  stopGame: boolean;
 }> = ({
   word,
   isActive,
@@ -24,6 +29,8 @@ const Word: React.FC<{
   lastCorrectlyTypedWordIndex,
   caretRef,
   paragraphRef,
+  startGame,
+  stopGame,
 }) => {
   const [cursorIndex, setCursorIndex] = useState<number>(-1);
   const [currentKey, setCurrentKey] = useState<string>("");
@@ -36,7 +43,7 @@ const Word: React.FC<{
     cursorIndexRef.current = cursorIndex;
   }, [cursorIndex]);
 
-  useEffect(() => {
+  const keyPressHandler = useCallback(
     function keyPressHandler(e: KeyboardEvent) {
       e.preventDefault();
       const { key } = e;
@@ -74,7 +81,7 @@ const Word: React.FC<{
           }
         } else {
           setCursorIndex((prev) => {
-            if (prev !== length) {
+            if (prev !== length - 1) {
               setCurrentKey(key);
               return prev + 1;
             }
@@ -82,8 +89,12 @@ const Word: React.FC<{
           });
         }
       }
-    }
-    if (isActive) {
+    },
+    [setActiveWordIndex, length, lastCorrectlyTypedWordIndex]
+  );
+
+  useEffect(() => {
+    if (isActive && startGame) {
       addEventListener("keydown", keyPressHandler);
     } else {
       removeEventListener("keydown", keyPressHandler);
@@ -91,7 +102,15 @@ const Word: React.FC<{
     return () => {
       removeEventListener("keydown", keyPressHandler);
     };
-  }, [isActive, setActiveWordIndex, length, lastCorrectlyTypedWordIndex]);
+  }, [isActive, startGame, keyPressHandler]);
+
+  useEffect(() => {
+    if (stopGame && isActive) {
+      removeEventListener("keydown", keyPressHandler);
+      const wpmResult = WpmTracker.getResult(GAME_LENGTH);
+      console.log(wpmResult);
+    }
+  }, [stopGame, keyPressHandler, isActive]);
 
   return (
     <div className={styles.word} ref={wordRef}>

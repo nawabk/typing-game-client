@@ -1,5 +1,6 @@
-import { MutableRefObject, RefObject, useEffect, useRef } from "react";
+import { MutableRefObject, useEffect, useRef } from "react";
 import styles from "@/styles/Playground.module.css";
+import WpmTracker from "./WpmTracker";
 
 const Letter: React.FC<{
   letter: string;
@@ -78,20 +79,41 @@ const Letter: React.FC<{
     if (currentKey === "Backspace") {
       if (cursorIndex + 1 === index) {
         if (letterRef.current?.className) {
-          if (letterRef.current.classList.contains(styles.incorrect)) {
-            totlaIncorrectTypedLetter.current -= 1;
+          const isIncorrectClassPresent = letterRef.current.classList.contains(
+            styles.incorrect
+          );
+          const isCorrectClassPresent = letterRef.current.classList.contains(
+            styles.correct
+          );
+          if (isIncorrectClassPresent || isCorrectClassPresent) {
+            WpmTracker.totalLetterTyped -= 1;
+            if (isIncorrectClassPresent) {
+              totlaIncorrectTypedLetter.current -= 1;
+              WpmTracker.totalIncorrectLetterTyped -= 1;
+            }
           }
           letterRef.current.className = "";
         }
       }
     } else {
       if (cursorIndex === index) {
+        // check if no correct or incorrect class added, then increment totalLetterTyped counter
+        const isIncorrectClassPresent = letterRef.current?.classList?.contains(
+          styles.incorrect
+        );
+        const isCorrectClassPresent = letterRef.current?.classList?.contains(
+          styles.correct
+        );
+        if (!isIncorrectClassPresent && !isCorrectClassPresent) {
+          WpmTracker.totalLetterTyped += 1;
+        }
         if (currentKey === letter) {
           letterRef.current?.classList?.add(styles.correct);
         } else {
           if (letterRef.current?.classList) {
             if (!letterRef.current.classList.contains(styles.incorrect)) {
               totlaIncorrectTypedLetter.current += 1;
+              WpmTracker.totalIncorrectLetterTyped += 1;
             }
             letterRef.current.classList.add(styles.incorrect);
           }
