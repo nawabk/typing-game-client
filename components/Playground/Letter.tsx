@@ -11,6 +11,7 @@ const Letter: React.FC<{
   caretRef: MutableRefObject<HTMLDivElement | null>;
   isLastLetter: boolean;
   paragraphRef: MutableRefObject<HTMLDivElement | null>;
+  wordRef: MutableRefObject<HTMLDivElement | null>;
 }> = ({
   letter,
   currentKey,
@@ -21,57 +22,57 @@ const Letter: React.FC<{
   caretRef,
   isLastLetter,
   paragraphRef,
+  wordRef,
 }) => {
   const letterRef = useRef<HTMLSpanElement | null>(null);
 
   useEffect(() => {
-    function checkForScroll(
-      letterHeight: number,
-      letterBottomPoint: number
-    ): number {
+    function checkForScroll(): number {
       const height: number = paragraphRef.current?.offsetHeight ?? 0;
       const top: number = paragraphRef.current?.offsetTop ?? 0;
-      const paragraphBottomPoint: number = height + top;
-      let totalScroll = 0;
-      if (letterHeight && letterBottomPoint) {
-        const differenceBetweenTwoLine = 2 * letterHeight;
-        console.log({
-          differenceBetweenTwoLine,
-          paragraphBottomPoint,
-          letterBottomPoint,
-        });
-        if (
-          paragraphBottomPoint - differenceBetweenTwoLine ===
-          letterBottomPoint
-        ) {
+      const scrollTop = paragraphRef.current?.scrollTop ?? 0;
+      const paragraphBottomPoint: number = height + top + scrollTop;
+      const wordHeight: number = wordRef.current?.offsetHeight ?? 0;
+      const wordTop: number = wordRef.current?.offsetTop ?? 0;
+      const wordBottomPoint: number = wordHeight + wordTop;
+      let totalScrolled: number = 0;
+      if (wordHeight && wordBottomPoint) {
+        if (paragraphBottomPoint - wordHeight === wordBottomPoint) {
           const scrollTop = paragraphRef.current?.scrollTop ?? 0;
           paragraphRef.current?.scrollTo({
-            top: scrollTop + differenceBetweenTwoLine,
+            top: scrollTop + wordHeight,
             behavior: "smooth",
           });
-          totalScroll = differenceBetweenTwoLine;
+          totalScrolled = wordHeight;
         }
       }
-      return totalScroll;
+      return totalScrolled;
     }
 
     if (isActive) {
       const isTypingAnyLetter = cursorIndex + 1 === index;
       const isTypingLastLetter = isLastLetter && index === cursorIndex;
       if (isTypingAnyLetter || isTypingLastLetter) {
-        const { left, top, right, bottom, height } =
+        const { left, top, right } =
           letterRef.current?.getBoundingClientRect() || {};
-        const paragraphScroll = checkForScroll(height ?? 0, bottom ?? 0);
+        const totalScrolled = checkForScroll();
         if (caretRef.current?.style && left && top && right) {
           caretRef.current.style.left =
             (!isTypingLastLetter ? (left - 3).toString() : right.toString()) +
             "px";
-          caretRef.current.style.top =
-            (top - paragraphScroll).toString() + "px";
+          caretRef.current.style.top = (top - totalScrolled).toString() + "px";
         }
       }
     }
-  }, [index, cursorIndex, caretRef, isActive, isLastLetter, paragraphRef]);
+  }, [
+    index,
+    cursorIndex,
+    caretRef,
+    isActive,
+    isLastLetter,
+    paragraphRef,
+    wordRef,
+  ]);
 
   useEffect(() => {
     if (currentKey === "Backspace") {

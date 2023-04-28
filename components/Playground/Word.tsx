@@ -30,6 +30,7 @@ const Word: React.FC<{
   const length = word.length;
   const totalIncorrectTypedLetter = useRef<number>(0);
   const cursorIndexRef = useRef<number>(-1);
+  const wordRef = useRef<HTMLDivElement | null>(null);
 
   useEffect(() => {
     cursorIndexRef.current = cursorIndex;
@@ -93,7 +94,7 @@ const Word: React.FC<{
   }, [isActive, setActiveWordIndex, length, lastCorrectlyTypedWordIndex]);
 
   return (
-    <div className={styles.word}>
+    <div className={styles.word} ref={wordRef}>
       {word.split("").map((letter, index) => (
         <Letter
           key={index}
@@ -106,6 +107,7 @@ const Word: React.FC<{
           isActive={isActive}
           isLastLetter={index === length - 1}
           paragraphRef={paragraphRef}
+          wordRef={wordRef}
         />
       ))}
     </div>

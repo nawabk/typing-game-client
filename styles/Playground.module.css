@@ -44,6 +44,10 @@
   letter-spacing: 3px;
 }
 
+/* .word span {
+  display: inline-block;
+} */
+
 .caret {
   position: absolute;
   height: 3rem;
