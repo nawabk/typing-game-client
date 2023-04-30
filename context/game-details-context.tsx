@@ -57,7 +57,9 @@ export const GameDetailsProvider: React.FC<{
 export const useGameDetailsContext = () => {
   const context = useContext(GameDetailsContext);
   if (context === undefined) {
-    throw new Error("useUserName must be used inside the UserNameProvider");
+    throw new Error(
+      "useGameDetailsContext must be used inside the UserNameProvider"
+    );
   }
   return context;
 };
