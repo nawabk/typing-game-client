@@ -30,6 +30,7 @@ const ParagraphBox: React.FC<{
               key={index}
               word={word}
               isActive={index === activeWordIndex}
+              activeWordIndex={activeWordIndex}
               setActiveWordIndex={setActiveWordIndex}
               lastCorrectlyTypedWordIndex={lastCorrectlyTypedWordIndex}
               caretRef={caretRef}

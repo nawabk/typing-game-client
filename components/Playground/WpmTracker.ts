@@ -12,19 +12,20 @@ class WpmTracker {
     this.totalLetterTyped = 0;
   }
 
-  static getResult(timeInSec: number = 60): WpmResult {
+  static getResult(timeInSec: number = 60, totalSpaceCount: number): WpmResult {
     const result: Partial<WpmResult> = {};
-    let totalLetterTyped: number;
+    let totalLetterTyped: number = totalSpaceCount;
     let totalCorrectLetterTyped: number;
     let totalIncorrectLetterTyped: number;
 
     if (timeInSec === 60) {
-      totalLetterTyped = this.totalLetterTyped;
+      totalLetterTyped += this.totalLetterTyped;
       totalIncorrectLetterTyped = this.totalIncorrectLetterTyped;
       totalCorrectLetterTyped =
         this.totalLetterTyped - this.totalIncorrectLetterTyped;
     } else {
-      totalLetterTyped = (this.totalLetterTyped / timeInSec) * 60;
+      totalLetterTyped =
+        ((totalSpaceCount + this.totalLetterTyped) / timeInSec) * 60;
       totalIncorrectLetterTyped =
         (this.totalIncorrectLetterTyped / timeInSec) * 60;
       totalCorrectLetterTyped = totalLetterTyped - totalIncorrectLetterTyped;

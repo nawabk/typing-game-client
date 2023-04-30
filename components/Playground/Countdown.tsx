@@ -3,6 +3,7 @@ import { useEffect, useRef, useState } from "react";
 import Backdrop from "../common/Backdrop";
 import { useGameDetailsContext } from "@/context/game-details-context";
 import { JsxElement } from "typescript";
+import { useUserContext } from "@/context/user-context";
 
 const Countdown: React.FC<{ setStartGame: (val: boolean) => void }> = ({
   setStartGame,
@@ -10,7 +11,10 @@ const Countdown: React.FC<{ setStartGame: (val: boolean) => void }> = ({
   const [countdown, setCountDown] = useState<number>(4);
   const ref = useRef<HTMLHeadingElement | null>(null);
   const { state } = useGameDetailsContext();
-  const { userName, competitor } = state;
+  const {
+    state: { userName },
+  } = useUserContext();
+  const { competitor } = state;
 
   useEffect(() => {
     let interval: ReturnType<typeof setInterval> | null = null;

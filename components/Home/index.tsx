@@ -1,18 +1,26 @@
 import React, { useEffect, useRef, useState } from "react";
 import styles from "../../styles/Home.module.css";
 
-import useSocket from "@/hooks/useSocket";
 import { useGameDetailsContext } from "@/context/game-details-context";
 import Loader from "../common/Loader";
 import { useRouter } from "next/router";
+import { socket } from "@/utils/socket";
+import useSocketInit from "@/hooks/useSocketInit";
+import { useUserContext } from "@/context/user-context";
+import { ChallengeDetailsMessage } from "@/utils/type";
 
 const Home: React.FC = () => {
   const inputRef = useRef<HTMLInputElement>(null);
   const { dispatch } = useGameDetailsContext();
+  const { dispatch: userDispatch } = useUserContext();
   const [error, setError] = useState<boolean>(false);
-  const socket = useSocket();
   const [findingCompetitor, setFindingCompetitor] = useState<boolean>(false);
   const router = useRouter();
+  // initialize socket
+  useSocketInit();
+  const { state: userState } = useUserContext();
+  const { socketDetails } = userState;
+  const socketId: string = socketDetails?.id;
 
   const formSubmitHandler = (e: React.SyntheticEvent) => {
     e.preventDefault();
@@ -21,7 +29,7 @@ const Home: React.FC = () => {
     if (!userName) {
       setError(true);
     } else {
-      dispatch({
+      userDispatch({
         type: "SET_USERNAME",
         payload: {
           userName,
@@ -36,33 +44,49 @@ const Home: React.FC = () => {
     function navigateToPlayground(channel: string) {
       router.push(`/play/${channel}`);
     }
-    if (socket) {
-      socket.on(
-        "challenge_details",
-        (message: { channel: string; paragraph: string }) => {
-          const { channel, paragraph } = message;
-          setTimeout(() => {
-            navigateToPlayground(channel);
-          }, 2 * 1000);
-          dispatch({
-            type: "SET_GAME_DETAILS",
-            payload: {
-              channel,
-              paragraph,
-            },
-          });
+
+    function onChallengeDetails(message: ChallengeDetailsMessage) {
+      try {
+        const { channel, paragraph, playerOneInfo, playerTwoInfo } = message;
+        let competitor;
+        if (playerTwoInfo.isRobot) {
+          competitor = playerTwoInfo.userName;
+        } else {
+          const { socketId: playerOneSocketId, userName: playerOneUserName } =
+            playerOneInfo;
+          const { socketId: playerTwoSocketId, userName: playerTwoUserName } =
+            playerTwoInfo;
+          if (socketId === playerOneSocketId) {
+            competitor = playerTwoUserName;
+          } else if (socketId === playerTwoSocketId) {
+            competitor = playerOneUserName;
+          } else {
+            throw new Error("Could not find competitor");
+          }
         }
-      );
-      socket.on("competitor", (name: string) => {
+
+        setTimeout(() => {
+          navigateToPlayground(channel);
+        }, 2 * 1000);
         dispatch({
-          type: "SET_COMPETITOR",
+          type: "SET_GAME_DETAILS",
           payload: {
-            competitor: name,
+            channel,
+            paragraph,
+            competitor,
           },
         });
-      });
+      } catch (err) {
+        console.log(err);
+      }
     }
-  }, [socket, dispatch, router]);
+
+    socket.on("challenge_details", onChallengeDetails);
+
+    return () => {
+      socket.off("challenge_details", onChallengeDetails);
+    };
+  }, [dispatch, userDispatch, router, socketId]);
 
   return (
     <main className={styles.main}>

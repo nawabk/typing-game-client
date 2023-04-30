@@ -16,6 +16,7 @@ const DISALLOWED_KEYS = ["Shift", "CapsLock"];
 const Word: React.FC<{
   word: string;
   isActive: boolean;
+  activeWordIndex: number;
   setActiveWordIndex: Dispatch<SetStateAction<number>>;
   lastCorrectlyTypedWordIndex: MutableRefObject<number>;
   caretRef: MutableRefObject<HTMLDivElement | null>;
@@ -25,6 +26,7 @@ const Word: React.FC<{
 }> = ({
   word,
   isActive,
+  activeWordIndex,
   setActiveWordIndex,
   lastCorrectlyTypedWordIndex,
   caretRef,
@@ -105,12 +107,12 @@ const Word: React.FC<{
   }, [isActive, startGame, keyPressHandler]);
 
   useEffect(() => {
-    if (stopGame && isActive) {
+    if (stopGame && isActive && activeWordIndex) {
       removeEventListener("keydown", keyPressHandler);
-      const wpmResult = WpmTracker.getResult(GAME_LENGTH);
+      const wpmResult = WpmTracker.getResult(GAME_LENGTH, activeWordIndex);
       console.log(wpmResult);
     }
-  }, [stopGame, keyPressHandler, isActive]);
+  }, [stopGame, keyPressHandler, isActive, activeWordIndex]);
 
   return (
     <div className={styles.word} ref={wordRef}>

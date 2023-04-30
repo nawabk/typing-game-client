@@ -1,9 +1,8 @@
 import styles from "../../styles/Playground.module.css";
-import Countdown from "./CountDown";
+import Countdown from "./Countdown";
 import { useRef, useState } from "react";
 import Timer from "./Timer";
 import ParagraphBox from "./PargraphBox1";
-import { useGameDetailsContext } from "@/context/game-details-context";
 import Caret from "./Caret";
 
 const Playground: React.FC = () => {
