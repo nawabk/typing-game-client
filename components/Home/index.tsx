@@ -19,8 +19,7 @@ const Home: React.FC = () => {
   // initialize socket
   useSocketInit();
   const { state: userState } = useUserContext();
-  const { socketDetails } = userState;
-  const socketId: string = socketDetails?.id;
+  const { socketId } = userState;
 
   const formSubmitHandler = (e: React.SyntheticEvent) => {
     e.preventDefault();
@@ -35,7 +34,7 @@ const Home: React.FC = () => {
           userName,
         },
       });
-      socket.emit("start-play", userName);
+      socket.emit("start_play", userName);
       setFindingCompetitor(true);
     }
   };

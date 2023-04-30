@@ -11,6 +11,10 @@ import Letter from "./Letter";
 import styles from "@/styles/Playground.module.css";
 import WpmTracker from "./WpmTracker";
 import { GAME_LENGTH } from "./Constansts";
+import { useUserContext } from "@/context/user-context";
+import { ChallengeScoreMessage } from "@/utils/type";
+import { socket } from "@/utils/socket";
+import { useGameDetailsContext } from "@/context/game-details-context";
 
 const DISALLOWED_KEYS = ["Shift", "CapsLock"];
 const Word: React.FC<{
@@ -40,6 +44,10 @@ const Word: React.FC<{
   const totalIncorrectTypedLetter = useRef<number>(0);
   const cursorIndexRef = useRef<number>(-1);
   const wordRef = useRef<HTMLDivElement | null>(null);
+  const { state } = useGameDetailsContext();
+  const { channel } = state;
+  const { state: userState } = useUserContext();
+  const { socketId } = userState;
 
   useEffect(() => {
     cursorIndexRef.current = cursorIndex;
@@ -110,9 +118,19 @@ const Word: React.FC<{
     if (stopGame && isActive && activeWordIndex) {
       removeEventListener("keydown", keyPressHandler);
       const wpmResult = WpmTracker.getResult(GAME_LENGTH, activeWordIndex);
-      console.log(wpmResult);
+      const { wpm, netWpm, accuracyInPerc } = wpmResult;
+      if (socketId) {
+        const scoreMessage: ChallengeScoreMessage = {
+          socketId,
+          channel,
+          wpm,
+          netWpm,
+          accuracyInPerc,
+        };
+        socket.emit("challenge_score", scoreMessage);
+      }
     }
-  }, [stopGame, keyPressHandler, isActive, activeWordIndex]);
+  }, [stopGame, keyPressHandler, isActive, activeWordIndex, socketId, channel]);
 
   return (
     <div className={styles.word} ref={wordRef}>

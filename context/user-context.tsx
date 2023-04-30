@@ -1,16 +1,12 @@
+import { PlayerInfo } from "@/utils/type";
 import { createContext, useContext, useReducer } from "react";
 
-interface State {
-  userName: string;
-  socketDetails: {
-    [key: string]: string;
-  };
-}
+type State = PlayerInfo;
 
 interface Action {
-  type: "SET_USERNAME" | "SET_SOCKET_DETAILS";
+  type: "SET_USERNAME" | "SET_SOCKET_ID";
   payload: {
-    [key: string]: string;
+    [key: string]: any;
   };
 }
 
@@ -28,14 +24,10 @@ const reducer = (state: State, action: Action): State => {
         ...state,
         userName: payload.userName,
       };
-
-    case "SET_SOCKET_DETAILS":
+    case "SET_SOCKET_ID":
       return {
         ...state,
-        socketDetails: {
-          ...state.socketDetails,
-          ...payload,
-        },
+        socketId: payload.socketId,
       };
     default:
       return state;
@@ -44,7 +36,7 @@ const reducer = (state: State, action: Action): State => {
 
 const initialState: State = {
   userName: "",
-  socketDetails: {},
+  socketId: "",
 };
 
 export const UserContextProvider: React.FC<{ children: React.ReactNode }> = ({

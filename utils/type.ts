@@ -10,3 +10,11 @@ export interface ChallengeDetailsMessage {
   playerOneInfo: PlayerInfo;
   playerTwoInfo: PlayerInfo;
 }
+
+export interface ChallengeScoreMessage {
+  socketId: string;
+  channel: string;
+  wpm: number;
+  netWpm: number;
+  accuracyInPerc: number;
+}

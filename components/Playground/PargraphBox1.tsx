@@ -3,6 +3,7 @@ import Word from "./Word";
 import styles from "@/styles/Playground.module.css";
 import { MutableRefObject, useEffect, useRef, useState } from "react";
 import WpmTracker from "./WpmTracker";
+import { socket } from "@/utils/socket";
 
 const ParagraphBox: React.FC<{
   caretRef: MutableRefObject<HTMLDivElement | null>;
@@ -19,6 +20,17 @@ const ParagraphBox: React.FC<{
 
   useEffect(() => {
     WpmTracker.resetData();
+  }, []);
+
+  useEffect(() => {
+    function onChallengeResult(message: any) {
+      console.log(message);
+    }
+    socket.on("challenge_result", onChallengeResult);
+
+    return () => {
+      socket.off("challenge_result", onChallengeResult);
+    };
   }, []);
 
   return (

@@ -8,9 +8,9 @@ const useSocketInit = () => {
     function onConnect() {
       console.log("connected");
       dispatch({
-        type: "SET_SOCKET_DETAILS",
+        type: "SET_SOCKET_ID",
         payload: {
-          id: socket.id,
+          socketId: socket.id,
         },
       });
     }
