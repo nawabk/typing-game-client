@@ -7,7 +7,7 @@ import { useRouter } from "next/router";
 import { socket } from "@/utils/socket";
 import useSocketInit from "@/hooks/useSocketInit";
 import { useUserContext } from "@/context/user-context";
-import { ChallengeDetailsMessage } from "@/utils/type";
+import { ChallengeDetailsMessage, PlayerInfo } from "@/utils/type";
 
 const Home: React.FC = () => {
   const inputRef = useRef<HTMLInputElement>(null);
@@ -48,34 +48,36 @@ const Home: React.FC = () => {
     function onChallengeDetails(message: ChallengeDetailsMessage) {
       try {
         const { channel, paragraph, playerOneInfo, playerTwoInfo } = message;
-        let competitor;
+        let competitorInfo: PlayerInfo;
         if (playerTwoInfo.isRobot) {
-          competitor = playerTwoInfo.userName;
+          competitorInfo = playerTwoInfo;
         } else {
-          const { socketId: playerOneSocketId, userName: playerOneUserName } =
-            playerOneInfo;
-          const { socketId: playerTwoSocketId, userName: playerTwoUserName } =
-            playerTwoInfo;
+          const { socketId: playerOneSocketId } = playerOneInfo;
+          const { socketId: playerTwoSocketId } = playerTwoInfo;
+
           if (socketId === playerOneSocketId) {
-            competitor = playerTwoUserName;
+            competitorInfo = playerTwoInfo;
           } else if (socketId === playerTwoSocketId) {
-            competitor = playerOneUserName;
+            competitorInfo = playerOneInfo;
           } else {
             throw new Error("Could not find competitor");
           }
         }
-
-        setTimeout(() => {
-          navigateToPlayground(channel);
-        }, 2 * 1000);
         dispatch({
           type: "SET_GAME_DETAILS",
           payload: {
             channel,
             paragraph,
-            competitor,
           },
         });
+        dispatch({
+          type: "SET_COMPETITOR",
+          payload: competitorInfo,
+        });
+
+        setTimeout(() => {
+          navigateToPlayground(channel);
+        }, 2 * 1000);
       } catch (err) {
         console.log(err);
       }

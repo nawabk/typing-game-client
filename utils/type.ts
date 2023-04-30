@@ -1,4 +1,4 @@
-type PlayerInfo = {
+export type PlayerInfo = {
   socketId?: string;
   userName: string;
   isRobot?: boolean;

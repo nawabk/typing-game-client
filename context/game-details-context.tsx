@@ -1,16 +1,16 @@
+import { PlayerInfo } from "@/utils/type";
 import React, { useContext, useReducer } from "react";
 
 interface State {
-  userName: string;
-  competitor: string;
+  competitorInfo: Partial<PlayerInfo>;
   paragraph: string;
   channel: string;
 }
 
 interface Action {
-  type: "SET_USERNAME" | "SET_COMPETITOR" | "SET_GAME_DETAILS";
+  type: "SET_COMPETITOR" | "SET_GAME_DETAILS";
   payload?: {
-    [key: string]: string;
+    [key: string]: any;
   };
 }
 
@@ -23,12 +23,19 @@ const GameDetailsContext = React.createContext<
 const reducer = (state: State, action: Action): State => {
   const { type, payload } = action;
   switch (type) {
-    case "SET_USERNAME":
-    case "SET_COMPETITOR":
     case "SET_GAME_DETAILS": {
       return {
         ...state,
         ...payload,
+      };
+    }
+    case "SET_COMPETITOR": {
+      return {
+        ...state,
+        competitorInfo: {
+          ...state.competitorInfo,
+          ...payload,
+        },
       };
     }
     default:
@@ -37,8 +44,7 @@ const reducer = (state: State, action: Action): State => {
 };
 
 const initialState: State = {
-  userName: "",
-  competitor: "",
+  competitorInfo: {},
   paragraph: "",
   channel: "",
 };
