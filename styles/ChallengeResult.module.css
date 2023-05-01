@@ -1,0 +1,31 @@
+.result-text {
+  font-size: 5rem;
+  display: flex;
+  justify-content: center;
+  margin-top: 10rem;
+}
+
+.result-text-won,
+.result-text-lost {
+  display: flex;
+  align-items: center;
+  gap: 2rem;
+  color: var(--color-sky-blue);
+}
+.result-text-won {
+  color: var(--color-green);
+}
+
+.score-cards {
+  display: flex;
+  justify-content: center;
+  gap: 4rem;
+  margin-top: 6rem;
+}
+
+.confetti {
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  transform: translate(-50%, -50%);
+}

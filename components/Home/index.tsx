@@ -5,7 +5,6 @@ import { useGameDetailsContext } from "@/context/game-details-context";
 import Loader from "../common/Loader";
 import { useRouter } from "next/router";
 import { socket } from "@/utils/socket";
-import useSocketInit from "@/hooks/useSocketInit";
 import { useUserContext } from "@/context/user-context";
 import { ChallengeDetailsMessage, PlayerInfo } from "@/utils/type";
 
@@ -16,8 +15,7 @@ const Home: React.FC = () => {
   const [error, setError] = useState<boolean>(false);
   const [findingCompetitor, setFindingCompetitor] = useState<boolean>(false);
   const router = useRouter();
-  // initialize socket
-  useSocketInit();
+
   const { state: userState } = useUserContext();
   const { socketId } = userState;
 
@@ -48,20 +46,28 @@ const Home: React.FC = () => {
       try {
         const { channel, paragraph, playerOneInfo, playerTwoInfo } = message;
         let competitorInfo: PlayerInfo;
+        let isUserPlayerOne: boolean = true;
         if (playerTwoInfo.isRobot) {
           competitorInfo = playerTwoInfo;
         } else {
           const { socketId: playerOneSocketId } = playerOneInfo;
           const { socketId: playerTwoSocketId } = playerTwoInfo;
-
           if (socketId === playerOneSocketId) {
             competitorInfo = playerTwoInfo;
           } else if (socketId === playerTwoSocketId) {
             competitorInfo = playerOneInfo;
+            isUserPlayerOne = false;
           } else {
             throw new Error("Could not find competitor");
           }
         }
+        console.log({ isUserPlayerOne });
+        userDispatch({
+          type: "SET_IS_PLAYER_ONE",
+          payload: {
+            isPlayerOne: isUserPlayerOne,
+          },
+        });
         dispatch({
           type: "SET_GAME_DETAILS",
           payload: {

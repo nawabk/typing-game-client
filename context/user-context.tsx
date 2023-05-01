@@ -4,7 +4,7 @@ import { createContext, useContext, useReducer } from "react";
 type State = PlayerInfo;
 
 interface Action {
-  type: "SET_USERNAME" | "SET_SOCKET_ID";
+  type: "SET_USERNAME" | "SET_SOCKET_ID" | "SET_IS_PLAYER_ONE";
   payload: {
     [key: string]: any;
   };
@@ -29,6 +29,11 @@ const reducer = (state: State, action: Action): State => {
         ...state,
         socketId: payload.socketId,
       };
+    case "SET_IS_PLAYER_ONE":
+      return {
+        ...state,
+        isPlayerOne: payload.isPlayerOne,
+      };
     default:
       return state;
   }
@@ -37,6 +42,7 @@ const reducer = (state: State, action: Action): State => {
 const initialState: State = {
   userName: "",
   socketId: "",
+  isPlayerOne: false,
 };
 
 export const UserContextProvider: React.FC<{ children: React.ReactNode }> = ({

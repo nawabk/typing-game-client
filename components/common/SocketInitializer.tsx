@@ -2,7 +2,7 @@ import { useUserContext } from "@/context/user-context";
 import { socket } from "@/utils/socket";
 import { useEffect } from "react";
 
-const useSocketInit = () => {
+const SocketInitializer: React.FC = () => {
   const { dispatch } = useUserContext();
   useEffect(() => {
     function onConnect() {
@@ -35,6 +35,7 @@ const useSocketInit = () => {
       socket.disconnect();
     };
   }, [dispatch]);
+  return null;
 };
 
-export default useSocketInit;
+export default SocketInitializer;

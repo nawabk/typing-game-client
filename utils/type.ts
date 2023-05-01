@@ -2,6 +2,7 @@ export type PlayerInfo = {
   socketId?: string;
   userName: string;
   isRobot?: boolean;
+  isPlayerOne?: boolean;
 };
 
 export interface ChallengeDetailsMessage {

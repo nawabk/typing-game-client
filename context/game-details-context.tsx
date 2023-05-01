@@ -1,14 +1,36 @@
 import { PlayerInfo } from "@/utils/type";
 import React, { useContext, useReducer } from "react";
 
+interface Score {
+  wpm: number;
+  netWpm: number;
+  accuracyInPerc: number;
+}
+
+interface PlayerResultInfo {
+  socketId: string;
+  userName: string;
+  isScoreRecieved?: boolean;
+  score: Score;
+  isRobot: boolean;
+}
+
+interface ChallengeResult {
+  isResultOut: boolean;
+  playerOneResult: Partial<PlayerResultInfo>;
+  playerTwoResult: Partial<PlayerResultInfo>;
+  winner: string;
+  draw?: boolean;
+}
 interface State {
   competitorInfo: Partial<PlayerInfo>;
   paragraph: string;
   channel: string;
+  result: Partial<ChallengeResult>;
 }
 
 interface Action {
-  type: "SET_COMPETITOR" | "SET_GAME_DETAILS";
+  type: "SET_COMPETITOR" | "SET_GAME_DETAILS" | "SET_CHALLENGE_RESULT";
   payload?: {
     [key: string]: any;
   };
@@ -38,6 +60,15 @@ const reducer = (state: State, action: Action): State => {
         },
       };
     }
+    case "SET_CHALLENGE_RESULT": {
+      return {
+        ...state,
+        result: {
+          ...state.result,
+          ...payload,
+        },
+      };
+    }
     default:
       return state;
   }
@@ -47,6 +78,7 @@ const initialState: State = {
   competitorInfo: {},
   paragraph: "",
   channel: "",
+  result: {},
 };
 
 export const GameDetailsProvider: React.FC<{

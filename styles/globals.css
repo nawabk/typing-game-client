@@ -1,6 +1,6 @@
 :root {
-  --color-black: #000000;
-  --color-pearl-white: #fbfcf8;
+  --color-black: #121212;
+  --color-pearl-white: #e0e0e0;
   --color-off-white: #f1f6f5;
   --color-white: #fff;
   --color-primary-blue: #4b56d2;
@@ -8,6 +8,7 @@
   --color-sky-blue: #82c3ec;
   --color-dark-grey: #423f3e;
   --color-red: #b00020;
+  --color-green: #00c4b4;
 }
 
 * {
