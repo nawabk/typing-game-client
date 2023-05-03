@@ -3,6 +3,7 @@ export type PlayerInfo = {
   userName: string;
   isRobot?: boolean;
   isPlayerOne?: boolean;
+  isAskingForRematch?: boolean;
 };
 
 export interface ChallengeDetailsMessage {
@@ -21,5 +22,9 @@ export interface ChallengeScoreMessage {
 }
 
 export interface LeaveChannelMessage {
+  channel: string;
+}
+
+export interface RematchRequestMessage {
   channel: string;
 }

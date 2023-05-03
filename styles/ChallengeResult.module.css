@@ -43,6 +43,21 @@
 .action-link {
   cursor: pointer;
 }
+.rematch-request {
+  position: relative;
+}
+.rematch-request-competitor {
+  color: var(--color-green);
+  position: absolute;
+  margin-left: 0.5rem;
+  white-space: nowrap;
+}
+.highlight {
+  animation-name: zoom-in-out;
+  animation-duration: 2s;
+  animation-iteration-count: infinite;
+  animation-timing-function: ease-in-out;
+}
 
 @keyframes moveFromDown {
   0% {
@@ -60,5 +75,17 @@
   }
   100% {
     opacity: 1;
+  }
+}
+
+@keyframes zoom-in-out {
+  0% {
+    transform: scale(1);
+  }
+  50% {
+    transform: scale(1.1);
+  }
+  100% {
+    transform: scale(1);
   }
 }
