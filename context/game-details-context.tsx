@@ -30,7 +30,11 @@ interface State {
 }
 
 interface Action {
-  type: "SET_COMPETITOR" | "SET_GAME_DETAILS" | "SET_CHALLENGE_RESULT";
+  type:
+    | "SET_COMPETITOR"
+    | "SET_GAME_DETAILS"
+    | "SET_CHALLENGE_RESULT"
+    | "RESET";
   payload?: {
     [key: string]: any;
   };
@@ -41,6 +45,13 @@ type Dispatch = (action: Action) => void;
 const GameDetailsContext = React.createContext<
   { state: State; dispatch: Dispatch } | undefined
 >(undefined);
+
+const initialState: State = {
+  competitorInfo: {},
+  paragraph: "",
+  channel: "",
+  result: {},
+};
 
 const reducer = (state: State, action: Action): State => {
   const { type, payload } = action;
@@ -69,16 +80,15 @@ const reducer = (state: State, action: Action): State => {
         },
       };
     }
+    case "RESET": {
+      return {
+        ...state,
+        ...initialState,
+      };
+    }
     default:
       return state;
   }
-};
-
-const initialState: State = {
-  competitorInfo: {},
-  paragraph: "",
-  channel: "",
-  result: {},
 };
 
 export const GameDetailsProvider: React.FC<{

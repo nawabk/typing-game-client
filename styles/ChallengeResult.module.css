@@ -21,6 +21,7 @@
   justify-content: center;
   gap: 4rem;
   margin-top: 6rem;
+  animation: moveFromDown 1s ease;
 }
 
 .confetti {
@@ -28,4 +29,36 @@
   left: 50%;
   top: 50%;
   transform: translate(-50%, -50%);
+}
+
+.actions {
+  margin-top: 6rem;
+  display: flex;
+  justify-content: center;
+  gap: 6rem;
+  animation: appear 0.5s ease 1.5s;
+  animation-fill-mode: backwards;
+}
+
+.action-link {
+  cursor: pointer;
+}
+
+@keyframes moveFromDown {
+  0% {
+    transform: translateY(100vh);
+  }
+
+  100% {
+    transform: translateY(0);
+  }
+}
+
+@keyframes appear {
+  0% {
+    opacity: 0;
+  }
+  100% {
+    opacity: 1;
+  }
 }

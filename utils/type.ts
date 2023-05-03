@@ -19,3 +19,7 @@ export interface ChallengeScoreMessage {
   netWpm: number;
   accuracyInPerc: number;
 }
+
+export interface LeaveChannelMessage {
+  channel: string;
+}
