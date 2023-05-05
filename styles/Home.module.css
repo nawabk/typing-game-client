@@ -23,7 +23,7 @@
   padding: 1rem 2rem;
   width: 35rem;
   outline: none;
-  border: 5px solid var(--color-dark-blue);
+  border: 5px solid var(--color-primary-blue);
   border-radius: 1rem;
   font-size: 2rem;
 }
@@ -39,4 +39,12 @@
   padding: 1.5rem 4rem;
   border-radius: 1rem;
   cursor: pointer;
+}
+
+.loader {
+  z-index: 2;
+  position: absolute;
+  left: 50%;
+  top: 30%;
+  transform: translateX(-50%);
 }

@@ -16,11 +16,11 @@ const Playground: React.FC = () => {
   const { state } = useGameDetailsContext();
   const { result } = state;
   useRouteChange();
-  useSocketEvents();
+  useSocketEvents({ setStartGame, setStopGame });
 
-  return (
-    <>
-      <div className={result.isResultOut ? styles["hide"] : ""}>
+  if (!result.isResultOut) {
+    return (
+      <div>
         <Caret ref={caretRef} />
         {!startGame && <Countdown setStartGame={setStartGame} />}
         <div className={styles.playground}>
@@ -32,9 +32,10 @@ const Playground: React.FC = () => {
           />
         </div>
       </div>
-      {result.isResultOut && <ChallengeResult />}
-    </>
-  );
+    );
+  } else {
+    return <ChallengeResult />;
+  }
 };
 
 export default Playground;

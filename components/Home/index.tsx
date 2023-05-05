@@ -7,6 +7,7 @@ import { useRouter } from "next/router";
 import { socket } from "@/utils/socket";
 import { useUserContext } from "@/context/user-context";
 import { ChallengeDetailsMessage, PlayerInfo } from "@/utils/type";
+import Backdrop from "../common/Backdrop";
 
 const Home: React.FC = () => {
   const inputRef = useRef<HTMLInputElement>(null);
@@ -61,7 +62,6 @@ const Home: React.FC = () => {
             throw new Error("Could not find competitor");
           }
         }
-        console.log({ isUserPlayerOne });
         userDispatch({
           type: "SET_IS_PLAYER_ONE",
           payload: {
@@ -98,9 +98,12 @@ const Home: React.FC = () => {
   return (
     <main className={styles.main}>
       {findingCompetitor && (
-        <div className={styles.loader}>
-          <Loader text="Finding Competitor" />
-        </div>
+        <>
+          <Backdrop />
+          <div className={styles.loader}>
+            <Loader text="Finding Competitor" />
+          </div>
+        </>
       )}
       <div className={styles.heading}>
         <h1 className="h1-primary">Typing Game</h1>

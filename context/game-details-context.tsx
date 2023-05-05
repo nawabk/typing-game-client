@@ -35,6 +35,7 @@ interface Action {
     | "SET_GAME_DETAILS"
     | "SET_CHALLENGE_RESULT"
     | "COMPETITOR_ASKING_REMATCH"
+    | "SET_FOR_REMATCH"
     | "RESET";
   payload?: {
     [key: string]: any;
@@ -88,6 +89,17 @@ const reducer = (state: State, action: Action): State => {
           ...state.competitorInfo,
           isAskingForRematch: true,
         },
+      };
+    }
+    case "SET_FOR_REMATCH": {
+      return {
+        ...state,
+        competitorInfo: {
+          ...state.competitorInfo,
+          isAskingForRematch: false,
+        },
+        paragraph: payload?.paragraph ?? "",
+        result: {},
       };
     }
     case "RESET": {

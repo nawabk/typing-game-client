@@ -89,19 +89,16 @@ const RematchLink: React.FC = () => {
     isAskingForRematch: isCompetitorAskingForRematch,
     userName: competitorUserName,
   } = competitorInfo;
+
   const rematchClickHandler = () => {
-    if (isCompetitorAskingForRematch) {
-      // confirm rematch
-    } else {
-      if (!isUserAskingForRematch) {
-        userDispatch({
-          type: "ASK_FOR_REMATCH",
-        });
-        const message: RematchRequestMessage = {
-          channel,
-        };
-        socket.emit("rematch_request", message);
-      }
+    if (isCompetitorAskingForRematch && !isUserAskingForRematch) {
+      userDispatch({
+        type: "ASK_FOR_REMATCH",
+      });
+      const message: RematchRequestMessage = {
+        channel,
+      };
+      socket.emit("rematch_request", message);
     }
   };
 

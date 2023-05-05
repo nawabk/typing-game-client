@@ -28,3 +28,7 @@ export interface LeaveChannelMessage {
 export interface RematchRequestMessage {
   channel: string;
 }
+
+export interface RematchMessage {
+  paragraph: string;
+}

@@ -3,17 +3,6 @@ import { createContext, useContext, useReducer } from "react";
 
 type State = PlayerInfo;
 
-// interface Action {
-//   type:
-//     | "SET_USERNAME"
-//     | "SET_SOCKET_ID"
-//     | "SET_IS_PLAYER_ONE"
-//     | "ASK_FOR_REMATCH";
-//   payload?: {
-//     [key: string]: any;
-//   };
-// }
-
 type Action =
   | { type: "SET_USERNAME"; payload: { userName: string } }
   | { type: "SET_SOCKET_ID"; payload: { socketId: string } }
@@ -23,7 +12,8 @@ type Action =
         isPlayerOne: boolean;
       };
     }
-  | { type: "ASK_FOR_REMATCH"; payload?: undefined };
+  | { type: "ASK_FOR_REMATCH"; payload?: never }
+  | { type: "SET_FOR_REMATCH"; payload?: never };
 
 type Dispatch = (action: Action) => void;
 
@@ -53,6 +43,11 @@ const reducer = (state: State, action: Action): State => {
       return {
         ...state,
         isAskingForRematch: true,
+      };
+    case "SET_FOR_REMATCH":
+      return {
+        ...state,
+        isAskingForRematch: false,
       };
     default:
       return state;
