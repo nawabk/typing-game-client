@@ -1,6 +1,5 @@
 .loader-wrapper {
   display: flex;
-  font-size: 4rem;
 }
 
 .ellipsis-loader {
@@ -13,8 +12,8 @@
 
 .ellipsis-loader div {
   display: inline-flex;
-  margin: 0 0.5rem;
-  font-size: 3rem;
+  margin: 0 0.4rem;
+  font-size: 4rem;
   opacity: 0;
   animation: ellipsis 1s infinite;
 }

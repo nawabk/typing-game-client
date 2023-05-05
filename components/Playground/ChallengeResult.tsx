@@ -9,6 +9,7 @@ import ConfettiExplosion from "react-confetti-explosion";
 import { useRouter } from "next/router";
 import { socket } from "@/utils/socket";
 import { RematchRequestMessage } from "@/utils/type";
+import Loader from "../common/Loader";
 
 const ChallengeResult: React.FC = () => {
   const { state } = useGameDetailsContext();
@@ -83,18 +84,22 @@ const HomeLink: React.FC = () => {
 const RematchLink: React.FC = () => {
   const { state } = useGameDetailsContext();
   const { state: userState, dispatch: userDispatch } = useUserContext();
-  const { channel, competitorInfo } = state;
+  const { channel, competitorInfo, rematchError } = state;
   const { isAskingForRematch: isUserAskingForRematch } = userState;
   const {
     isAskingForRematch: isCompetitorAskingForRematch,
     userName: competitorUserName,
   } = competitorInfo;
 
+  console.log({ isUserAskingForRematch });
+
   const rematchClickHandler = () => {
-    if (isCompetitorAskingForRematch && !isUserAskingForRematch) {
-      userDispatch({
-        type: "ASK_FOR_REMATCH",
-      });
+    if (isCompetitorAskingForRematch || !isUserAskingForRematch) {
+      if (!isUserAskingForRematch) {
+        userDispatch({
+          type: "ASK_FOR_REMATCH",
+        });
+      }
       const message: RematchRequestMessage = {
         channel,
       };
@@ -102,24 +107,43 @@ const RematchLink: React.FC = () => {
     }
   };
 
-  const textJSX = isCompetitorAskingForRematch ? (
-    <div className={styles["rematch-request"]}>
-      🤺 Rematch
-      <span className={styles["rematch-request-competitor"]}>
-        ({competitorUserName} is requesting)
-      </span>
-    </div>
-  ) : (
-    "🤺 Rematch"
-  );
+  let textJSX;
 
-  return (
-    <ActionLink
-      text={textJSX}
-      onClick={rematchClickHandler}
-      highlight={isCompetitorAskingForRematch}
-    />
-  );
+  if (isUserAskingForRematch) {
+    textJSX = (
+      <Loader
+        text="Waiting"
+        wrapperClass={styles["waiting-loader-wrapper"]}
+        loaderClass={styles["waiting-loader"]}
+      />
+    );
+  } else if (isCompetitorAskingForRematch) {
+    textJSX = (
+      <div className={styles["rematch-request"]}>
+        🤺 Rematch
+        <span className={styles["rematch-request-competitor"]}>
+          <span>(</span>
+          {competitorUserName} is requesting<span>)</span>
+        </span>
+      </div>
+    );
+  } else {
+    textJSX = "🤺 Rematch";
+  }
+
+  if (rematchError) {
+    return (
+      <p className={`p-large ${styles["rematch-error"]}`}>{rematchError}</p>
+    );
+  } else {
+    return (
+      <ActionLink
+        text={textJSX}
+        onClick={rematchClickHandler}
+        highlight={isCompetitorAskingForRematch}
+      />
+    );
+  }
 };
 
 interface Props extends React.DOMAttributes<HTMLParagraphElement> {

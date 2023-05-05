@@ -13,7 +13,8 @@ type Action =
       };
     }
   | { type: "ASK_FOR_REMATCH"; payload?: never }
-  | { type: "SET_FOR_REMATCH"; payload?: never };
+  | { type: "SET_FOR_REMATCH"; payload?: never }
+  | { type: "RESET"; payload?: never };
 
 type Dispatch = (action: Action) => void;
 
@@ -47,6 +48,12 @@ const reducer = (state: State, action: Action): State => {
     case "SET_FOR_REMATCH":
       return {
         ...state,
+        isAskingForRematch: false,
+      };
+    case "RESET":
+      return {
+        ...state,
+        isPlayerOne: false,
         isAskingForRematch: false,
       };
     default:

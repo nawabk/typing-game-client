@@ -32,3 +32,7 @@ export interface RematchRequestMessage {
 export interface RematchMessage {
   paragraph: string;
 }
+
+export interface RematchErrorMessage {
+  errMsg: string;
+}

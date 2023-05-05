@@ -51,6 +51,7 @@ const Home: React.FC = () => {
         if (playerTwoInfo.isRobot) {
           competitorInfo = playerTwoInfo;
         } else {
+          console.log(socketId);
           const { socketId: playerOneSocketId } = playerOneInfo;
           const { socketId: playerTwoSocketId } = playerTwoInfo;
           if (socketId === playerOneSocketId) {

@@ -34,10 +34,12 @@
 .actions {
   margin-top: 6rem;
   display: flex;
-  justify-content: center;
+  margin-left: 43.5vw;
+  align-items: center;
   gap: 6rem;
   animation: appear 0.5s ease 1.5s;
   animation-fill-mode: backwards;
+  line-height: 1;
 }
 
 .action-link {
@@ -47,16 +49,35 @@
   position: relative;
 }
 .rematch-request-competitor {
-  color: var(--color-green);
+  color: var(--color-primary-blue);
   position: absolute;
   margin-left: 0.5rem;
   white-space: nowrap;
 }
+
+.rematch-error {
+  color: var(--color-red);
+}
+
 .highlight {
   animation-name: zoom-in-out;
   animation-duration: 2s;
   animation-iteration-count: infinite;
   animation-timing-function: ease-in-out;
+}
+
+.waiting-loader-wrapper {
+  position: relative;
+}
+
+.waiting-loader {
+  position: absolute;
+  right: -4rem;
+  top: -20%;
+}
+.waiting-loader div {
+  font-size: 3rem;
+  margin: 0 0.2rem;
 }
 
 @keyframes moveFromDown {

@@ -1,7 +1,7 @@
 import { useGameDetailsContext } from "@/context/game-details-context";
 import { useUserContext } from "@/context/user-context";
 import { socket } from "@/utils/socket";
-import { RematchMessage } from "@/utils/type";
+import { RematchErrorMessage, RematchMessage } from "@/utils/type";
 import { Dispatch, useEffect } from "react";
 
 interface Props {
@@ -33,12 +33,24 @@ const useSocketEvents = ({ setStartGame, setStopGame }: Props) => {
       setStopGame(false);
     }
 
+    function onRematchError(message: RematchErrorMessage) {
+      const { errMsg } = message;
+      dispatch({
+        type: "SET_REMATCH_ERROR",
+        payload: {
+          errMsg,
+        },
+      });
+    }
+
     socket.on("rematch_request", onRematchRequest);
     socket.on("rematch", onRematch);
+    socket.on("rematch_error", onRematchError);
 
     return () => {
       socket.off("rematch_request");
       socket.off("rematch");
+      socket.off("rematch_error", onRematchError);
     };
   }, [dispatch, userDispatch, setStartGame, setStopGame]);
 };

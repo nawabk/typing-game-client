@@ -27,6 +27,7 @@ interface State {
   paragraph: string;
   channel: string;
   result: Partial<ChallengeResult>;
+  rematchError?: string;
 }
 
 interface Action {
@@ -36,6 +37,7 @@ interface Action {
     | "SET_CHALLENGE_RESULT"
     | "COMPETITOR_ASKING_REMATCH"
     | "SET_FOR_REMATCH"
+    | "SET_REMATCH_ERROR"
     | "RESET";
   payload?: {
     [key: string]: any;
@@ -53,6 +55,7 @@ const initialState: State = {
   paragraph: "",
   channel: "",
   result: {},
+  rematchError: "",
 };
 
 const reducer = (state: State, action: Action): State => {
@@ -100,6 +103,13 @@ const reducer = (state: State, action: Action): State => {
         },
         paragraph: payload?.paragraph ?? "",
         result: {},
+        rematchError: "",
+      };
+    }
+    case "SET_REMATCH_ERROR": {
+      return {
+        ...state,
+        rematchError: payload?.errMsg ?? "",
       };
     }
     case "RESET": {

@@ -4,7 +4,7 @@
   right: 0;
   top: 0;
   bottom: 0;
-  background-color: var(--color-primary-blue);
+  background-color: var(--color-black);
   z-index: 1;
   transition: background-color 0.5s;
 }
