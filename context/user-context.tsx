@@ -1,18 +1,20 @@
+import { PlayerInfo } from "@/utils/type";
 import { createContext, useContext, useReducer } from "react";
 
-interface State {
-  userName: string;
-  socketDetails: {
-    [key: string]: string;
-  };
-}
+type State = PlayerInfo;
 
-interface Action {
-  type: "SET_USERNAME" | "SET_SOCKET_DETAILS";
-  payload: {
-    [key: string]: string;
-  };
-}
+type Action =
+  | { type: "SET_USERNAME"; payload: { userName: string } }
+  | { type: "SET_SOCKET_ID"; payload: { socketId: string } }
+  | {
+      type: "SET_IS_PLAYER_ONE";
+      payload: {
+        isPlayerOne: boolean;
+      };
+    }
+  | { type: "ASK_FOR_REMATCH"; payload?: never }
+  | { type: "SET_FOR_REMATCH"; payload?: never }
+  | { type: "RESET"; payload?: never };
 
 type Dispatch = (action: Action) => void;
 
@@ -28,14 +30,31 @@ const reducer = (state: State, action: Action): State => {
         ...state,
         userName: payload.userName,
       };
-
-    case "SET_SOCKET_DETAILS":
+    case "SET_SOCKET_ID":
       return {
         ...state,
-        socketDetails: {
-          ...state.socketDetails,
-          ...payload,
-        },
+        socketId: payload.socketId,
+      };
+    case "SET_IS_PLAYER_ONE":
+      return {
+        ...state,
+        isPlayerOne: payload.isPlayerOne,
+      };
+    case "ASK_FOR_REMATCH":
+      return {
+        ...state,
+        isAskingForRematch: true,
+      };
+    case "SET_FOR_REMATCH":
+      return {
+        ...state,
+        isAskingForRematch: false,
+      };
+    case "RESET":
+      return {
+        ...state,
+        isPlayerOne: false,
+        isAskingForRematch: false,
       };
     default:
       return state;
@@ -44,7 +63,8 @@ const reducer = (state: State, action: Action): State => {
 
 const initialState: State = {
   userName: "",
-  socketDetails: {},
+  socketId: "",
+  isPlayerOne: false,
 };
 
 export const UserContextProvider: React.FC<{ children: React.ReactNode }> = ({

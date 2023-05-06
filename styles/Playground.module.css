@@ -55,3 +55,7 @@
   background-color: var(--color-primary-blue);
   transition: all 0.1s ease;
 }
+
+.hide {
+  display: none;
+}

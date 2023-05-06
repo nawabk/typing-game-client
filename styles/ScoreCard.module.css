@@ -1,0 +1,47 @@
+.score-card {
+  display: flex;
+  align-items: center;
+  flex-direction: column;
+  padding: 4rem 10rem;
+  /* border: 1px solid blue; */
+  box-shadow: 4px 2px 25px 3px rgba(0, 0, 0, 0.5);
+}
+
+.score-card-user {
+  /* color: var(--color-sky-blue); */
+  font-size: 3.2rem;
+  color: var(--color-green);
+}
+
+.score-card-container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 3rem;
+  margin-top: 4rem;
+}
+
+.score {
+  display: flex;
+  gap: 2rem;
+  align-items: center;
+  font-weight: normal;
+  font-size: 1.8rem;
+  line-height: 1;
+  color: var(--color-dark-grey);
+}
+.score-value {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+.score-value span {
+  font-size: 1.2rem;
+}
+
+.score.focused {
+  font-weight: 700;
+  font-size: 3.2rem;
+  color: #fec260;
+  /* color: var(--color-primary-blue); */
+}

@@ -1,0 +1,112 @@
+.result-text {
+  font-size: 5rem;
+  display: flex;
+  justify-content: center;
+  margin-top: 10rem;
+}
+
+.result-text-won,
+.result-text-lost {
+  display: flex;
+  align-items: center;
+  gap: 2rem;
+  color: var(--color-sky-blue);
+}
+.result-text-won {
+  color: var(--color-green);
+}
+
+.score-cards {
+  display: flex;
+  justify-content: center;
+  gap: 4rem;
+  margin-top: 6rem;
+  animation: moveFromDown 1s ease;
+}
+
+.confetti {
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  transform: translate(-50%, -50%);
+}
+
+.actions {
+  margin-top: 6rem;
+  display: flex;
+  margin-left: 43.5vw;
+  align-items: center;
+  gap: 6rem;
+  animation: appear 0.5s ease 1.5s;
+  animation-fill-mode: backwards;
+  line-height: 1;
+}
+
+.action-link {
+  cursor: pointer;
+}
+.rematch-request {
+  position: relative;
+}
+.rematch-request-competitor {
+  color: var(--color-primary-blue);
+  position: absolute;
+  margin-left: 0.5rem;
+  white-space: nowrap;
+}
+
+.rematch-error {
+  color: var(--color-red);
+}
+
+.highlight {
+  animation-name: zoom-in-out;
+  animation-duration: 2s;
+  animation-iteration-count: infinite;
+  animation-timing-function: ease-in-out;
+}
+
+.waiting-loader-wrapper {
+  position: relative;
+}
+
+.waiting-loader {
+  position: absolute;
+  right: -4rem;
+  top: -20%;
+}
+.waiting-loader div {
+  font-size: 3rem;
+  margin: 0 0.2rem;
+}
+
+@keyframes moveFromDown {
+  0% {
+    transform: translateY(100vh);
+  }
+
+  100% {
+    transform: translateY(0);
+  }
+}
+
+@keyframes appear {
+  0% {
+    opacity: 0;
+  }
+  100% {
+    opacity: 1;
+  }
+}
+
+@keyframes zoom-in-out {
+  0% {
+    transform: scale(1);
+  }
+  50% {
+    transform: scale(1.1);
+  }
+  100% {
+    transform: scale(1);
+  }
+}

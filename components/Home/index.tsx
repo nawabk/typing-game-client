@@ -5,9 +5,9 @@ import { useGameDetailsContext } from "@/context/game-details-context";
 import Loader from "../common/Loader";
 import { useRouter } from "next/router";
 import { socket } from "@/utils/socket";
-import useSocketInit from "@/hooks/useSocketInit";
 import { useUserContext } from "@/context/user-context";
-import { ChallengeDetailsMessage } from "@/utils/type";
+import { ChallengeDetailsMessage, PlayerInfo } from "@/utils/type";
+import Backdrop from "../common/Backdrop";
 
 const Home: React.FC = () => {
   const inputRef = useRef<HTMLInputElement>(null);
@@ -16,11 +16,9 @@ const Home: React.FC = () => {
   const [error, setError] = useState<boolean>(false);
   const [findingCompetitor, setFindingCompetitor] = useState<boolean>(false);
   const router = useRouter();
-  // initialize socket
-  useSocketInit();
+
   const { state: userState } = useUserContext();
-  const { socketDetails } = userState;
-  const socketId: string = socketDetails?.id;
+  const { socketId } = userState;
 
   const formSubmitHandler = (e: React.SyntheticEvent) => {
     e.preventDefault();
@@ -35,7 +33,7 @@ const Home: React.FC = () => {
           userName,
         },
       });
-      socket.emit("start-play", userName);
+      socket.emit("start_play", userName);
       setFindingCompetitor(true);
     }
   };
@@ -48,34 +46,44 @@ const Home: React.FC = () => {
     function onChallengeDetails(message: ChallengeDetailsMessage) {
       try {
         const { channel, paragraph, playerOneInfo, playerTwoInfo } = message;
-        let competitor;
+        let competitorInfo: PlayerInfo;
+        let isUserPlayerOne: boolean = true;
         if (playerTwoInfo.isRobot) {
-          competitor = playerTwoInfo.userName;
+          competitorInfo = playerTwoInfo;
         } else {
-          const { socketId: playerOneSocketId, userName: playerOneUserName } =
-            playerOneInfo;
-          const { socketId: playerTwoSocketId, userName: playerTwoUserName } =
-            playerTwoInfo;
+          console.log(socketId);
+          const { socketId: playerOneSocketId } = playerOneInfo;
+          const { socketId: playerTwoSocketId } = playerTwoInfo;
           if (socketId === playerOneSocketId) {
-            competitor = playerTwoUserName;
+            competitorInfo = playerTwoInfo;
           } else if (socketId === playerTwoSocketId) {
-            competitor = playerOneUserName;
+            competitorInfo = playerOneInfo;
+            isUserPlayerOne = false;
           } else {
             throw new Error("Could not find competitor");
           }
         }
-
-        setTimeout(() => {
-          navigateToPlayground(channel);
-        }, 2 * 1000);
+        userDispatch({
+          type: "SET_IS_PLAYER_ONE",
+          payload: {
+            isPlayerOne: isUserPlayerOne,
+          },
+        });
         dispatch({
           type: "SET_GAME_DETAILS",
           payload: {
             channel,
             paragraph,
-            competitor,
           },
         });
+        dispatch({
+          type: "SET_COMPETITOR",
+          payload: competitorInfo,
+        });
+
+        setTimeout(() => {
+          navigateToPlayground(channel);
+        }, 2 * 1000);
       } catch (err) {
         console.log(err);
       }
@@ -91,9 +99,12 @@ const Home: React.FC = () => {
   return (
     <main className={styles.main}>
       {findingCompetitor && (
-        <div className={styles.loader}>
-          <Loader text="Finding Competitor" />
-        </div>
+        <>
+          <Backdrop />
+          <div className={styles.loader}>
+            <Loader text="Finding Competitor" />
+          </div>
+        </>
       )}
       <div className={styles.heading}>
         <h1 className="h1-primary">Typing Game</h1>

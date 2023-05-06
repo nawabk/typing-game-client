@@ -1,8 +1,6 @@
 import styles from "@/styles/Countdown.module.css";
 import { useEffect, useRef, useState } from "react";
-import Backdrop from "../common/Backdrop";
 import { useGameDetailsContext } from "@/context/game-details-context";
-import { JsxElement } from "typescript";
 import { useUserContext } from "@/context/user-context";
 
 const Countdown: React.FC<{ setStartGame: (val: boolean) => void }> = ({
@@ -14,13 +12,14 @@ const Countdown: React.FC<{ setStartGame: (val: boolean) => void }> = ({
   const {
     state: { userName },
   } = useUserContext();
-  const { competitor } = state;
+  const { competitorInfo } = state;
+  const competitor = competitorInfo?.userName;
 
   useEffect(() => {
     let interval: ReturnType<typeof setInterval> | null = null;
     interval = setInterval(() => {
       setCountDown((prev) => {
-        if (prev === 0 && interval) {
+        if (prev === 1 && interval) {
           clearInterval(interval);
         }
         return prev - 1;
@@ -39,7 +38,7 @@ const Countdown: React.FC<{ setStartGame: (val: boolean) => void }> = ({
   }, []);
 
   useEffect(() => {
-    if (countdown === -1) {
+    if (countdown === 0) {
       setStartGame(true);
     }
   }, [countdown, setStartGame]);
