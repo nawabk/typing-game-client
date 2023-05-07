@@ -7,21 +7,12 @@ import { useEffect } from "react";
 
 const useRouteChange = () => {
   const router = useRouter();
-  const { state, dispatch } = useGameDetailsContext();
+  const { dispatch } = useGameDetailsContext();
   const { dispatch: userDispatch } = useUserContext();
-  const { channel } = state;
 
   useEffect(() => {
     const onRouteChange = () => {
-      let message: LeaveChannelMessage;
-      if (channel) {
-        message = {
-          channel,
-        };
-        socket.emit("leave_channel", {
-          channel,
-        });
-      }
+      socket.emit("leave_channel");
       dispatch({
         type: "RESET",
       });
@@ -34,7 +25,7 @@ const useRouteChange = () => {
     return () => {
       router.events.off("routeChangeStart", onRouteChange);
     };
-  }, [router, channel, dispatch, userDispatch]);
+  }, [router, dispatch, userDispatch]);
 };
 
 export default useRouteChange;

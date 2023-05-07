@@ -45,19 +45,18 @@ const Home: React.FC = () => {
 
     function onChallengeDetails(message: ChallengeDetailsMessage) {
       try {
-        const { channel, paragraph, playerOneInfo, playerTwoInfo } = message;
+        const { channel, paragraph, playerOne, playerTwo } = message;
         let competitorInfo: PlayerInfo;
         let isUserPlayerOne: boolean = true;
-        if (playerTwoInfo.isRobot) {
-          competitorInfo = playerTwoInfo;
+        if (playerTwo.isRobot) {
+          competitorInfo = playerTwo;
         } else {
-          console.log(socketId);
-          const { socketId: playerOneSocketId } = playerOneInfo;
-          const { socketId: playerTwoSocketId } = playerTwoInfo;
+          const { socketId: playerOneSocketId } = playerOne;
+          const { socketId: playerTwoSocketId } = playerTwo;
           if (socketId === playerOneSocketId) {
-            competitorInfo = playerTwoInfo;
+            competitorInfo = playerTwo;
           } else if (socketId === playerTwoSocketId) {
-            competitorInfo = playerOneInfo;
+            competitorInfo = playerOne;
             isUserPlayerOne = false;
           } else {
             throw new Error("Could not find competitor");

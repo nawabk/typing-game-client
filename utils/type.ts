@@ -2,6 +2,7 @@ export type PlayerInfo = {
   socketId?: string;
   userName: string;
   isRobot?: boolean;
+  channel?: string;
   isPlayerOne?: boolean;
   isAskingForRematch?: boolean;
 };
@@ -9,8 +10,8 @@ export type PlayerInfo = {
 export interface ChallengeDetailsMessage {
   channel: string;
   paragraph: string;
-  playerOneInfo: PlayerInfo;
-  playerTwoInfo: PlayerInfo;
+  playerOne: PlayerInfo;
+  playerTwo: PlayerInfo;
 }
 
 export interface ChallengeScoreMessage {

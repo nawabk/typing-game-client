@@ -115,7 +115,7 @@ const Word: React.FC<{
   }, [isActive, startGame, keyPressHandler]);
 
   useEffect(() => {
-    if (stopGame && isActive && activeWordIndex) {
+    if (stopGame && isActive) {
       removeEventListener("keydown", keyPressHandler);
       const wpmResult = WpmTracker.getResult(GAME_LENGTH, activeWordIndex);
       const { wpm, netWpm, accuracyInPerc } = wpmResult;
