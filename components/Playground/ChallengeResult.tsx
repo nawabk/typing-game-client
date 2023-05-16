@@ -20,6 +20,7 @@ const ChallengeResult: React.FC = () => {
   const { playerOneResult, playerTwoResult } = result;
   let userResult, competitorResult;
   let isWinner: boolean = result.winner === socketId;
+  const draw: boolean = result.draw ?? false;
 
   if (isUserPlayerOne && playerOneResult?.socketId === socketId) {
     userResult = playerOneResult;
@@ -31,18 +32,25 @@ const ChallengeResult: React.FC = () => {
     console.error("Socket id is not matched with the result");
   }
 
+  const showConfetti = isWinner || draw;
+
   return (
     <div className={styles["challenge-result"]}>
-      {isWinner && (
+      {showConfetti && (
         <div className={styles.confetti}>
           <ConfettiExplosion particleCount={250} duration={4000} width={1600} />
         </div>
       )}
       <h1 className={styles["result-text"]}>
-        {isWinner ? (
+        {isWinner || draw ? (
           <span className={styles["result-text-won"]}>
-            You Won
-            <Image src={SmileyEmoji} alt="Sad Emoji" height={50} width={50} />
+            {draw ? "Draw" : "You Won"}
+            <Image
+              src={SmileyEmoji}
+              alt="Smiley Emoji"
+              height={50}
+              width={50}
+            />
           </span>
         ) : (
           <span className={styles["result-text-lost"]}>
@@ -65,7 +73,7 @@ const ChallengeResult: React.FC = () => {
           accuracyInPerc={competitorResult?.score?.accuracyInPerc ?? 0}
         />
       </div>
-      <div className={styles.actions}>
+      <div className={`${styles.actions}${isRobot ? " " + styles.center : ""}`}>
         <HomeLink />
         {!isRobot && <RematchLink />}
       </div>

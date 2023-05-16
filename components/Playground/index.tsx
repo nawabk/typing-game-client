@@ -19,7 +19,11 @@ const Playground: React.FC = () => {
   useSocketEvents({ setStartGame, setStopGame });
 
   if (!channel || !paragraph) {
-    return null;
+    return (
+      <button className={styles.button}>
+        <p className="p-large">Home</p>
+      </button>
+    );
   } else {
     if (!result.isResultOut) {
       return (
