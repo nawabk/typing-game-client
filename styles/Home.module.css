@@ -1,14 +1,16 @@
 .main {
   margin-top: 20rem;
+  padding-inline: 4rem;
 }
 
 .heading {
   text-align: center;
 }
 
-.heading p {
+.subtext {
   margin-top: 4rem;
   margin-inline: auto;
+  width: 60vw;
 }
 
 .form {
@@ -48,4 +50,58 @@
   top: 30%;
   transform: translateX(-50%);
   font-size: 4rem;
+}
+
+.desktop-text {
+  margin-top: 2rem;
+  text-align: center;
+  color: var(--color-primary-blue);
+}
+
+@media (max-width: 78.125em) {
+  .subtext {
+    width: 70vw;
+  }
+  .input {
+    font-size: 1.8rem;
+    width: 30rem;
+  }
+  .form {
+    margin-top: 4rem;
+  }
+
+  .button {
+    padding: 1.2rem 3.7rem;
+  }
+  .loader {
+    font-size: 3rem;
+  }
+}
+
+@media (max-width: 48em) {
+  .main {
+    padding-inline: 2rem;
+  }
+
+  .input {
+    font-size: 1.4rem;
+    width: 28rem;
+  }
+
+  .subtext {
+    margin-top: 2rem;
+    width: 70vw;
+  }
+
+  .form {
+    margin-top: 2rem;
+  }
+
+  .button {
+    padding: 1rem 3.5rem;
+  }
+
+  .loader {
+    font-size: 2rem;
+  }
 }

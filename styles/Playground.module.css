@@ -60,11 +60,18 @@
   display: none;
 }
 
-.button {
+.no-channel {
   position: absolute;
   left: 50%;
   top: 50%;
   transform: translate(-50%, -50%);
+  display: flex;
+  flex-direction: column;
+  gap: 4rem;
+  align-items: center;
+}
+
+.button {
   border: none;
   background-color: var(--color-primary-blue);
   color: var(--color-off-white);

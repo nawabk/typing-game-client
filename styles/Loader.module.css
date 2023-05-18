@@ -26,6 +26,25 @@
   animation-delay: 0.4s;
 }
 
+@media (max-width: 768.125em) {
+  .ellipsis-loader div {
+    font-size: 3rem;
+  }
+}
+
+@media (max-width: 48em) {
+  .loader-wrapper {
+    flex-direction: column;
+    align-items: center;
+  }
+  .ellipsis-loader {
+    align-self: stretch;
+  }
+  .ellipsis-loader div {
+    font-size: 2rem;
+  }
+}
+
 @keyframes ellipsis {
   0% {
     opacity: 0.5;

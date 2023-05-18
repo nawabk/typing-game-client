@@ -38,7 +38,7 @@ const ChallengeResult: React.FC = () => {
     <div className={styles["challenge-result"]}>
       {showConfetti && (
         <div className={styles.confetti}>
-          <ConfettiExplosion particleCount={250} duration={4000} width={1600} />
+          <ConfettiExplosion particleCount={250} duration={6000} width={1600} />
         </div>
       )}
       <h1 className={styles["result-text"]}>
@@ -98,8 +98,6 @@ const RematchLink: React.FC = () => {
     isAskingForRematch: isCompetitorAskingForRematch,
     userName: competitorUserName,
   } = competitorInfo;
-
-  console.log({ isUserAskingForRematch });
 
   const rematchClickHandler = () => {
     if (isCompetitorAskingForRematch || !isUserAskingForRematch) {

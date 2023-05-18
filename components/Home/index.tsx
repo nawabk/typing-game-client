@@ -1,4 +1,5 @@
 import React, { useEffect, useRef, useState } from "react";
+import { isMobile } from "react-device-detect";
 import styles from "../../styles/Home.module.css";
 
 import { useGameDetailsContext } from "@/context/game-details-context";
@@ -16,9 +17,10 @@ const Home: React.FC = () => {
   const [error, setError] = useState<boolean>(false);
   const [findingCompetitor, setFindingCompetitor] = useState<boolean>(false);
   const router = useRouter();
+  const [isMobileDevice, setIsMobileDevice] = useState<boolean>(false);
 
   const { state: userState } = useUserContext();
-  const { socketId } = userState;
+  const { socketId, userName } = userState;
 
   const formSubmitHandler = (e: React.SyntheticEvent) => {
     e.preventDefault();
@@ -37,6 +39,12 @@ const Home: React.FC = () => {
       setFindingCompetitor(true);
     }
   };
+
+  useEffect(() => {
+    if (isMobile) {
+      setIsMobileDevice(true);
+    }
+  }, []);
 
   useEffect(() => {
     function navigateToPlayground(channel: string) {
@@ -107,25 +115,31 @@ const Home: React.FC = () => {
       )}
       <div className={styles.heading}>
         <h1 className="h1-primary">Typing Game</h1>
-        <p className="p-large">
+        <p className={`p-large ${styles.subtext}`}>
           Welcome to our exciting typing game, where two opponents will battle
-          it out to see who is <br />
-          the fastest and most accurate typist!
+          it out to see who is the fastest and most accurate typist!
         </p>
       </div>
-      <form className={styles.form} onSubmit={formSubmitHandler}>
-        <input
-          type="text"
-          required
-          className={styles.input}
-          placeholder="Enter username"
-          ref={inputRef}
-        />
-        <span className="text-large">&</span>
-        <button type="submit" className={styles.button}>
-          <p className="p-large">Start Playing</p>
-        </button>
-      </form>
+      {!isMobileDevice ? (
+        <form className={styles.form} onSubmit={formSubmitHandler}>
+          <input
+            type="text"
+            required
+            className={styles.input}
+            placeholder="Enter username"
+            ref={inputRef}
+            defaultValue={userName}
+          />
+          <span className="text-large">&</span>
+          <button type="submit" className={styles.button}>
+            <p className="p-large">Start Playing</p>
+          </button>
+        </form>
+      ) : (
+        <p className={`p-primary ${styles["desktop-text"]}`}>
+          Please visit our website on a desktop computer to enjoy the game
+        </p>
+      )}
     </main>
   );
 };
