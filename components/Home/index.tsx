@@ -88,9 +88,7 @@ const Home: React.FC = () => {
           payload: competitorInfo,
         });
 
-        setTimeout(() => {
-          navigateToPlayground(channel);
-        }, 2 * 1000);
+        navigateToPlayground(channel);
       } catch (err) {
         console.log(err);
       }
