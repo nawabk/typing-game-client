@@ -13,29 +13,38 @@ class WpmTracker {
   }
 
   static getResult(timeInSec: number = 60, totalSpaceCount: number): WpmResult {
-    const result: Partial<WpmResult> = {};
-    let totalLetterTyped: number = totalSpaceCount;
-    let totalCorrectLetterTyped: number;
-    let totalIncorrectLetterTyped: number;
+    try {
+      const result: Partial<WpmResult> = {};
+      let totalLetterTyped: number = totalSpaceCount;
+      let totalCorrectLetterTyped: number;
+      let totalIncorrectLetterTyped: number;
 
-    if (timeInSec === 60) {
-      totalLetterTyped += this.totalLetterTyped;
-      totalIncorrectLetterTyped = this.totalIncorrectLetterTyped;
-      totalCorrectLetterTyped =
-        this.totalLetterTyped - this.totalIncorrectLetterTyped;
-    } else {
-      totalLetterTyped =
-        ((totalSpaceCount + this.totalLetterTyped) / timeInSec) * 60;
-      totalIncorrectLetterTyped =
-        (this.totalIncorrectLetterTyped / timeInSec) * 60;
-      totalCorrectLetterTyped = totalLetterTyped - totalIncorrectLetterTyped;
+      if (timeInSec === 60) {
+        totalLetterTyped += this.totalLetterTyped;
+        totalIncorrectLetterTyped = this.totalIncorrectLetterTyped;
+        totalCorrectLetterTyped =
+          this.totalLetterTyped - this.totalIncorrectLetterTyped;
+      } else {
+        totalLetterTyped =
+          ((totalSpaceCount + this.totalLetterTyped) / timeInSec) * 60;
+        totalIncorrectLetterTyped =
+          (this.totalIncorrectLetterTyped / timeInSec) * 60;
+        totalCorrectLetterTyped = totalLetterTyped - totalIncorrectLetterTyped;
+      }
+      result.wpm = Math.round(totalLetterTyped / 5);
+      result.netWpm = Math.round(totalCorrectLetterTyped / 5);
+      result.accuracyInPerc = +Number(
+        (totalCorrectLetterTyped / totalLetterTyped) * 100
+      ).toFixed(2);
+      return result as WpmResult;
+    } catch (e) {
+      console.log(e);
+      return {
+        wpm: 0,
+        netWpm: 0,
+        accuracyInPerc: 0,
+      };
     }
-    result.wpm = Math.round(totalLetterTyped / 5);
-    result.netWpm = Math.round(totalCorrectLetterTyped / 5);
-    result.accuracyInPerc = +Number(
-      (totalCorrectLetterTyped / totalLetterTyped) * 100
-    ).toFixed(2);
-    return result as WpmResult;
   }
 }
 

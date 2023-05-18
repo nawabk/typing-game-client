@@ -6,7 +6,6 @@ const SocketInitializer: React.FC = () => {
   const { dispatch } = useUserContext();
   useEffect(() => {
     function onConnect() {
-      console.log("connected");
       dispatch({
         type: "SET_SOCKET_ID",
         payload: {
@@ -28,7 +27,6 @@ const SocketInitializer: React.FC = () => {
 
     //socket connect
     socket.connect();
-    console.log("calling connect");
 
     return () => {
       socket.off("connect", onConnect);

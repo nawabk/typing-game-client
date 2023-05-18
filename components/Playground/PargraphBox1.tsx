@@ -24,7 +24,6 @@ const ParagraphBox: React.FC<{
 
   useEffect(() => {
     function onChallengeResult(message: any) {
-      console.log(message);
       dispatch({
         type: "SET_CHALLENGE_RESULT",
         payload: {

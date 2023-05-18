@@ -51,14 +51,6 @@ p.p-primary {
   font-size: 1.6rem;
 }
 
-p.p-medium {
-  font-size: 1.4rem;
-}
-
-p.small {
-  font-size: 1.2rem;
-}
-
 .text-large {
   font-size: 2rem;
 }
@@ -67,10 +59,54 @@ p.small {
   font-size: 1.6rem;
 }
 
-.text-medium {
-  font-size: 1.4rem;
+@media (max-width: 78.125em) {
+  h1.h1-primary {
+    font-size: 3.6rem;
+  }
+
+  h2.h2-primary {
+    font-size: 2.5rem;
+  }
+
+  p.h2-primary {
+    font-size: 2.5rem;
+  }
+
+  p.p-large {
+    font-size: 1.8rem;
+  }
+
+  .text-large {
+    font-size: 1.8rem;
+  }
 }
 
-.text-small {
-  font-size: 1.2rem;
+@media (max-width: 48em) {
+  h1.h1-primary {
+    font-size: 2.2rem;
+  }
+
+  h2.h2-primary {
+    font-size: 1.9rem;
+  }
+
+  p.h2-primary {
+    font-size: 1.9rem;
+  }
+
+  p.p-large {
+    font-size: 1.4rem;
+  }
+
+  .text-large {
+    font-size: 1.4rem;
+  }
+
+  p.p-primary {
+    font-size: 1.2rem;
+  }
+
+  .text-primary {
+    font-size: 1.2rem;
+  }
 }

@@ -42,6 +42,11 @@
   line-height: 1;
 }
 
+.actions.center {
+  margin-left: 0;
+  justify-content: center;
+}
+
 .action-link {
   cursor: pointer;
 }
