@@ -45,3 +45,42 @@
   color: #fec260;
   /* color: var(--color-primary-blue); */
 }
+
+@media (max-width: 78.125em) {
+  .score-card {
+    padding: 2rem 4rem;
+  }
+  .score-card-user {
+    font-size: 3rem;
+  }
+  .score.focused {
+    font-size: 2.8rem;
+  }
+}
+
+@media (max-width: 48em) {
+  .score-card {
+    padding: 2rem;
+  }
+
+  .score-card-user {
+    font-size: 2.5rem;
+  }
+
+  .score-card-container {
+    /* gap: 2rem; */
+    margin-top: 2rem;
+  }
+
+  .score {
+    font-size: 1.5rem;
+  }
+
+  .score-value span {
+    font-size: 1rem;
+  }
+
+  .score.focused {
+    font-size: 2.5rem;
+  }
+}

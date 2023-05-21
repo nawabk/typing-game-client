@@ -16,6 +16,13 @@
   color: var(--color-green);
 }
 
+.result-img {
+  position: relative;
+  object-fit: cover;
+  height: 5rem;
+  width: 5rem;
+}
+
 .score-cards {
   display: flex;
   justify-content: center;
@@ -113,5 +120,46 @@
   }
   100% {
     transform: scale(1);
+  }
+}
+
+@media (max-width: 78.125em) {
+  .result-text {
+    margin-top: 6rem;
+    font-size: 4rem;
+  }
+}
+
+@media (max-width: 48em) {
+  .result-text {
+    margin-top: 4rem;
+    font-size: 3rem;
+  }
+
+  .result-img {
+    height: 3rem;
+    width: 3rem;
+  }
+
+  .score-cards {
+    flex-direction: column;
+    align-items: center;
+    margin-top: 4rem;
+    gap: 2rem;
+  }
+
+  .actions {
+    margin-top: 4rem;
+    gap: 4rem;
+    flex-direction: column;
+    justify-content: center;
+    margin-left: 0;
+    padding-bottom: 5rem;
+  }
+
+  .rematch-request-competitor {
+    top: 110%;
+    left: 50%;
+    transform: translateX(-50%);
   }
 }

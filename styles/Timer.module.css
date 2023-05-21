@@ -12,3 +12,26 @@
   font-size: 10rem;
   color: var(--color-sky-blue);
 }
+
+@media (max-width: 78.125em) {
+  .timer {
+    height: 12rem;
+    width: 12rem;
+    border-width: 1rem;
+  }
+
+  .count {
+    font-size: 6rem;
+  }
+}
+
+@media (max-width: 48em) {
+  .timer {
+    height: 8rem;
+    width: 8rem;
+    border-width: 0.5rem;
+  }
+  .count {
+    font-size: 4rem;
+  }
+}
