@@ -18,12 +18,7 @@ const MobileInput = forwardRef<HTMLInputElement, Props>((_, ref) => {
   }
 
   return ReactDOM.createPortal(
-    <input
-      type="text"
-      className={styles["mobile-input"]}
-      ref={ref}
-      autoFocus
-    />,
+    <input type="text" className={styles["mobile-input"]} ref={ref} />,
     document.getElementById("playground")!
   );
 });
