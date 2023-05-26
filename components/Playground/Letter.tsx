@@ -1,4 +1,4 @@
-import { MutableRefObject, useEffect, useRef } from "react";
+import { MutableRefObject, createRef, useEffect, useRef } from "react";
 import styles from "@/styles/Playground.module.css";
 import WpmTracker from "./WpmTracker";
 
@@ -56,12 +56,16 @@ const Letter: React.FC<{
       if (isTypingAnyLetter || isTypingLastLetter) {
         const { left, top, right } =
           letterRef.current?.getBoundingClientRect() || {};
+        const scrollFromTop =
+          window.pageYOffset || document.documentElement.scrollTop;
         const totalScrolled = checkForScroll();
         if (caretRef.current?.style && left && top && right) {
           caretRef.current.style.left =
             (!isTypingLastLetter ? (left - 3).toString() : right.toString()) +
             "px";
-          caretRef.current.style.top = (top - totalScrolled).toString() + "px";
+          const topWithOffSet = top + scrollFromTop;
+          caretRef.current.style.top =
+            (topWithOffSet - totalScrolled).toString() + "px";
         }
       }
     }

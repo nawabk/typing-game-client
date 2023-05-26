@@ -70,6 +70,7 @@
 
 .mobile-input {
   opacity: 0;
+  height: 0;
 }
 
 @media (max-width: 78.125em) {
@@ -96,7 +97,6 @@
   }
 
   .caret {
-    /* height: 4rem; */
     width: 0.2rem;
   }
 }
