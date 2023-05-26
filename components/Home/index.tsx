@@ -126,6 +126,7 @@ const Home: React.FC = () => {
       <form className={styles.form} onSubmit={formSubmitHandler}>
         <input
           type="text"
+          maxLength={15}
           required
           className={styles.input}
           placeholder="Enter username"
