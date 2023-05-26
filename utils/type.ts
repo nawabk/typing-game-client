@@ -37,3 +37,8 @@ export interface RematchMessage {
 export interface RematchErrorMessage {
   errMsg: string;
 }
+
+export interface StartPlayMessage {
+  userName: string;
+  isMobileUser: boolean;
+}

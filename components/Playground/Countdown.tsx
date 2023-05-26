@@ -46,14 +46,16 @@ const Countdown: React.FC<{ setStartGame: (val: boolean) => void }> = ({
   function getH2Text() {
     if (countdown === 4) {
       return (
-        <span>
-          {userName} vs {competitor}
+        <span className={styles.fighters}>
+          <span>{userName}</span>
+          <span>vs</span>
+          <span>{competitor}</span>
         </span>
       );
     } else if (countdown === 0) {
-      return "GO!";
+      return <span>GO!</span>;
     }
-    return countdown.toString();
+    return <span>{countdown.toString()}</span>;
   }
 
   return (

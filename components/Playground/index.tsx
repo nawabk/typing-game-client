@@ -9,6 +9,7 @@ import ChallengeResult from "./ChallengeResult";
 import useRouteChange from "./hooks/useRouteChange";
 import useSocketEvents from "./hooks/useSocketEvents";
 import { useRouter } from "next/router";
+import MobileInput from "./MobileInput";
 
 const Playground: React.FC = () => {
   const [startGame, setStartGame] = useState<boolean>(false);
@@ -32,7 +33,7 @@ const Playground: React.FC = () => {
   } else {
     if (!result.isResultOut) {
       return (
-        <div>
+        <div id="playground">
           <Caret ref={caretRef} />
           {!startGame && <Countdown setStartGame={setStartGame} />}
           <div className={styles.playground}>

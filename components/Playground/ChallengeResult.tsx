@@ -10,6 +10,7 @@ import { useRouter } from "next/router";
 import { socket } from "@/utils/socket";
 import { RematchRequestMessage } from "@/utils/type";
 import Loader from "../common/Loader";
+import { isMobile } from "react-device-detect";
 
 const ChallengeResult: React.FC = () => {
   const { state } = useGameDetailsContext();
@@ -43,20 +44,19 @@ const ChallengeResult: React.FC = () => {
       )}
       <h1 className={styles["result-text"]}>
         {isWinner || draw ? (
-          <span className={styles["result-text-won"]}>
+          <div className={styles["result-text-won"]}>
             {draw ? "Draw" : "You Won"}
-            <Image
-              src={SmileyEmoji}
-              alt="Smiley Emoji"
-              height={50}
-              width={50}
-            />
-          </span>
+            <div className={styles["result-img"]}>
+              <Image src={SmileyEmoji} alt="Smiley Emoji" fill />
+            </div>
+          </div>
         ) : (
-          <span className={styles["result-text-lost"]}>
+          <div className={styles["result-text-lost"]}>
             You Lost{" "}
-            <Image src={SadEmoji} alt="Sad Emoji" height={50} width={50} />
-          </span>
+            <div className={styles["result-img"]}>
+              <Image src={SadEmoji} alt="Sad Emoji" fill />
+            </div>
+          </div>
         )}
       </h1>
       <div className={styles["score-cards"]}>

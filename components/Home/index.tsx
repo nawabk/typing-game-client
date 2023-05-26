@@ -1,5 +1,4 @@
 import React, { useEffect, useRef, useState } from "react";
-import { isMobile } from "react-device-detect";
 import styles from "../../styles/Home.module.css";
 
 import { useGameDetailsContext } from "@/context/game-details-context";
@@ -7,8 +6,13 @@ import Loader from "../common/Loader";
 import { useRouter } from "next/router";
 import { socket } from "@/utils/socket";
 import { useUserContext } from "@/context/user-context";
-import { ChallengeDetailsMessage, PlayerInfo } from "@/utils/type";
+import {
+  ChallengeDetailsMessage,
+  PlayerInfo,
+  StartPlayMessage,
+} from "@/utils/type";
 import Backdrop from "../common/Backdrop";
+import { isMobile } from "react-device-detect";
 
 const Home: React.FC = () => {
   const inputRef = useRef<HTMLInputElement>(null);
@@ -17,10 +21,13 @@ const Home: React.FC = () => {
   const [error, setError] = useState<boolean>(false);
   const [findingCompetitor, setFindingCompetitor] = useState<boolean>(false);
   const router = useRouter();
-  const [isMobileDevice, setIsMobileDevice] = useState<boolean>(false);
 
   const { state: userState } = useUserContext();
   const { socketId, userName } = userState;
+
+  useEffect(() => {
+    inputRef.current?.focus();
+  }, []);
 
   const formSubmitHandler = (e: React.SyntheticEvent) => {
     e.preventDefault();
@@ -35,16 +42,14 @@ const Home: React.FC = () => {
           userName,
         },
       });
-      socket.emit("start_play", userName);
+      const message: StartPlayMessage = {
+        userName,
+        isMobileUser: isMobile,
+      };
+      socket.emit("start_play", message);
       setFindingCompetitor(true);
     }
   };
-
-  useEffect(() => {
-    if (isMobile) {
-      setIsMobileDevice(true);
-    }
-  }, []);
 
   useEffect(() => {
     function navigateToPlayground(channel: string) {
@@ -118,26 +123,21 @@ const Home: React.FC = () => {
           it out to see who is the fastest and most accurate typist!
         </p>
       </div>
-      {!isMobileDevice ? (
-        <form className={styles.form} onSubmit={formSubmitHandler}>
-          <input
-            type="text"
-            required
-            className={styles.input}
-            placeholder="Enter username"
-            ref={inputRef}
-            defaultValue={userName}
-          />
-          <span className="text-large">&</span>
-          <button type="submit" className={styles.button}>
-            <p className="p-large">Start Playing</p>
-          </button>
-        </form>
-      ) : (
-        <p className={`p-primary ${styles["desktop-text"]}`}>
-          Please visit our website on a desktop computer to enjoy the game
-        </p>
-      )}
+      <form className={styles.form} onSubmit={formSubmitHandler}>
+        <input
+          type="text"
+          maxLength={15}
+          required
+          className={styles.input}
+          placeholder="Enter username"
+          ref={inputRef}
+          defaultValue={userName}
+        />
+        <span className="text-large">&</span>
+        <button type="submit" className={styles.button}>
+          <p className="p-large">Start Playing</p>
+        </button>
+      </form>
     </main>
   );
 };

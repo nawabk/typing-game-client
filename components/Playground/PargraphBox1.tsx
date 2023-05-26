@@ -4,6 +4,8 @@ import styles from "@/styles/Playground.module.css";
 import { MutableRefObject, useEffect, useRef, useState } from "react";
 import WpmTracker from "./WpmTracker";
 import { socket } from "@/utils/socket";
+import MobileInput from "./MobileInput";
+import { isMobile } from "react-device-detect";
 
 const ParagraphBox: React.FC<{
   caretRef: MutableRefObject<HTMLDivElement | null>;
@@ -15,6 +17,7 @@ const ParagraphBox: React.FC<{
   const [activeWordIndex, setActiveWordIndex] = useState<number>(0);
   const lastCorrectlyTypedWordIndex = useRef<number>(-1);
   const paragraphRef = useRef<HTMLDivElement | null>(null);
+  const inputRef = useRef<HTMLInputElement | null>(null);
 
   const words = paragraph.split(" ");
 
@@ -39,25 +42,34 @@ const ParagraphBox: React.FC<{
     };
   }, [dispatch]);
 
+  useEffect(() => {
+    if (isMobile) {
+      inputRef.current?.focus();
+    }
+  }, [startGame]);
   return (
-    <div className={styles.words} ref={paragraphRef}>
-      {words.map((word, index) => {
-        return (
-          <Word
-            key={index}
-            word={word}
-            isActive={index === activeWordIndex}
-            activeWordIndex={activeWordIndex}
-            setActiveWordIndex={setActiveWordIndex}
-            lastCorrectlyTypedWordIndex={lastCorrectlyTypedWordIndex}
-            caretRef={caretRef}
-            paragraphRef={paragraphRef}
-            startGame={startGame}
-            stopGame={stopGame}
-          />
-        );
-      })}
-    </div>
+    <>
+      <MobileInput ref={inputRef} onBlur={() => inputRef.current?.focus()} />
+      <div className={styles.words} ref={paragraphRef}>
+        {words.map((word, index) => {
+          return (
+            <Word
+              key={index}
+              word={word}
+              isActive={index === activeWordIndex}
+              activeWordIndex={activeWordIndex}
+              setActiveWordIndex={setActiveWordIndex}
+              lastCorrectlyTypedWordIndex={lastCorrectlyTypedWordIndex}
+              caretRef={caretRef}
+              paragraphRef={paragraphRef}
+              startGame={startGame}
+              stopGame={stopGame}
+              inputRef={inputRef}
+            />
+          );
+        })}
+      </div>
+    </>
   );
 };
 

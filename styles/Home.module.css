@@ -59,6 +59,9 @@
 }
 
 @media (max-width: 78.125em) {
+  .main {
+    margin-top: 16rem;
+  }
   .subtext {
     width: 70vw;
   }
@@ -81,6 +84,7 @@
 @media (max-width: 48em) {
   .main {
     padding-inline: 2rem;
+    margin-top: 10rem;
   }
 
   .input {
@@ -90,7 +94,7 @@
 
   .subtext {
     margin-top: 2rem;
-    width: 70vw;
+    width: 90vw;
   }
 
   .form {

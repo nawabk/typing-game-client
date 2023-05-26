@@ -4,18 +4,6 @@
   align-items: center;
   margin-top: 8rem;
 }
-.paragraph-box {
-  width: 90rem;
-  margin: 0 auto;
-  max-height: 50rem;
-  overflow: auto;
-  font-size: 2.5rem;
-  margin-top: 6rem;
-  text-align: justify;
-  border-radius: 1rem;
-  color: var(--color-dark-grey);
-  letter-spacing: 2px;
-}
 
 .correct {
   color: var(--color-off-white);
@@ -25,7 +13,7 @@
 }
 
 .words {
-  width: 70vw;
+  width: 120rem;
   margin: 0 auto;
   max-height: 30rem;
   overflow: auto;
@@ -78,4 +66,37 @@
   padding: 1.5rem 4rem;
   border-radius: 1rem;
   cursor: pointer;
+}
+
+.mobile-input {
+  opacity: 0;
+  height: 0;
+}
+
+@media (max-width: 78.125em) {
+  .playground {
+    padding-inline: 6rem;
+  }
+
+  .words {
+    width: 70rem;
+    max-height: 25rem;
+  }
+}
+
+@media (max-width: 48em) {
+  .playground {
+    padding-inline: 2rem;
+    margin-top: 6rem;
+  }
+
+  .words {
+    width: 32rem;
+    margin-top: 4rem;
+    column-gap: 0.6rem;
+  }
+
+  .caret {
+    width: 0.2rem;
+  }
 }
