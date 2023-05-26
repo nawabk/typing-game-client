@@ -45,6 +45,7 @@ const ParagraphBox: React.FC<{
   useEffect(() => {
     if (startGame && isMobile) {
       setTimeout(() => {
+        inputRef.current?.click();
         inputRef.current?.focus();
       }, 100);
     }
