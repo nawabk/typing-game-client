@@ -3,25 +3,28 @@ import ReactDOM from "react-dom";
 import { isMobile } from "react-device-detect";
 import styles from "@/styles/Playground.module.css";
 
-interface Props extends React.DOMAttributes<HTMLInputElement> {}
-const MobileInput = forwardRef<HTMLInputElement, Props>((_, ref) => {
-  const [show, setShow] = useState<boolean>(false);
+interface Props extends React.DOMAttributes<HTMLInputElement> {
+  show: boolean;
+  setShow: React.Dispatch<boolean>;
+}
+const MobileInput = forwardRef<HTMLInputElement, Props>(
+  ({ show, setShow }, ref) => {
+    useEffect(() => {
+      if (isMobile) {
+        setShow(true);
+      }
+    }, [setShow]);
 
-  useEffect(() => {
-    if (isMobile) {
-      setShow(true);
+    if (!show) {
+      return null;
     }
-  }, []);
 
-  if (!show) {
-    return null;
+    return ReactDOM.createPortal(
+      <input type="text" className={styles["mobile-input"]} ref={ref} />,
+      document.getElementById("playground")!
+    );
   }
-
-  return ReactDOM.createPortal(
-    <input type="text" className={styles["mobile-input"]} ref={ref} />,
-    document.getElementById("playground")!
-  );
-});
+);
 
 MobileInput.displayName = "MobileInput";
 

@@ -2,6 +2,7 @@ import styles from "@/styles/Countdown.module.css";
 import { useEffect, useRef, useState } from "react";
 import { useGameDetailsContext } from "@/context/game-details-context";
 import { useUserContext } from "@/context/user-context";
+import { isMobile } from "react-device-detect";
 
 const Countdown: React.FC<{ setStartGame: (val: boolean) => void }> = ({
   setStartGame,
@@ -66,6 +67,11 @@ const Countdown: React.FC<{ setStartGame: (val: boolean) => void }> = ({
           {getH2Text()}
         </h2>
       </div>
+      {isMobile && (
+        <span className={styles["open-keypad-text"]}>
+          To open the keypad, simply click on any word after the game starts.
+        </span>
+      )}
     </>
   );
 };
