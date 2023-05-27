@@ -5,7 +5,6 @@ import { MutableRefObject, useEffect, useRef, useState } from "react";
 import WpmTracker from "./WpmTracker";
 import { socket } from "@/utils/socket";
 import MobileInput from "./MobileInput";
-import { isMobile } from "react-device-detect";
 
 const ParagraphBox: React.FC<{
   caretRef: MutableRefObject<HTMLDivElement | null>;
@@ -18,6 +17,7 @@ const ParagraphBox: React.FC<{
   const lastCorrectlyTypedWordIndex = useRef<number>(-1);
   const paragraphRef = useRef<HTMLDivElement | null>(null);
   const inputRef = useRef<HTMLInputElement | null>(null);
+  const [showMobileInput, setShowMobileInput] = useState<boolean>(false);
 
   const words = paragraph.split(" ");
 
@@ -43,13 +43,25 @@ const ParagraphBox: React.FC<{
   }, [dispatch]);
 
   useEffect(() => {
-    if (startGame && isMobile) {
-      inputRef.current?.focus();
+    if (showMobileInput) {
+      const paragraph = paragraphRef.current?.getBoundingClientRect();
+      if (paragraph && inputRef.current) {
+        const { height, width, left, top } = paragraph;
+        inputRef.current.style.left = left.toString() + "px";
+        inputRef.current.style.top = top.toString() + "px";
+        inputRef.current.style.height = height.toString() + "px";
+        inputRef.current.style.width = width.toString() + "px";
+      }
     }
-  }, [startGame]);
+  }, [showMobileInput]);
+
   return (
     <>
-      <MobileInput ref={inputRef} onBlur={() => inputRef.current?.focus()} />
+      <MobileInput
+        ref={inputRef}
+        show={showMobileInput}
+        setShow={setShowMobileInput}
+      />
       <div className={styles.words} ref={paragraphRef}>
         {words.map((word, index) => {
           return (

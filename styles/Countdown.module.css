@@ -21,6 +21,17 @@
   color: var(--color-primary-blue);
 }
 
+.open-keypad-text {
+  text-align: center;
+  color: var(--color-yellow);
+  position: absolute;
+  left: 50%;
+  transform: translateX(-50%);
+  top: 50%;
+  z-index: 2;
+  max-width: 50%;
+}
+
 .countanime {
   animation: countdownAnime 0.2s;
   /* animation: name duration timing-function delay iteration-count direction
